@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  google_api_key: 'AIzaSyDe_pq558lhHUEP6Yg9MkFiw9fNADxmejI',
   firebaseConfig : {
     apiKey: "AIzaSyDqbhzRxVgl000Ulno7M4_1vfbQPn7WA-o",
     authDomain: "smart-bins-vitb.firebaseapp.com",
