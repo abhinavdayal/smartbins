@@ -5,7 +5,7 @@ import { SnotifyService } from 'ng-snotify';
 import { AlertService } from './services/alert-service.service';
 import { GeolocationService } from './services/geolocation.service';
 import { GeoLocation } from './data/models';
-
+import { AuthService } from './auth/services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   constructor(private snotifyService: SnotifyService, private swUpdate: SwUpdate,
     private router: Router, private alertService: AlertService, private swPush: SwPush,
-    private geolocationService: GeolocationService
+    private geolocationService: GeolocationService, private authService: AuthService
   ) {
     window.addEventListener('beforeinstallprompt', event => {
       this.promptEvent = event;
@@ -47,8 +47,18 @@ export class AppComponent implements OnInit {
     })
   }
 
-  test() {
-    this.snotifyService.simple("Hello");
+  loggedin = false;
+  logingoogle() {
+    this.authService.loginWithGoogle().then(() => {
+      console.log(localStorage.getItem('user'))
+      this.loggedin = true;
+    })
+  }
+
+  logout() {
+    this.authService.logout().then(() => {
+      this.loggedin = false;
+    })
   }
 
   installPwa(): void {
