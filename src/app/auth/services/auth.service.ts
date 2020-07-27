@@ -4,6 +4,8 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { User } from 'firebase';
 
+// https://www.techiediaries.com/angular-firebase/angular-9-firebase-authentication-email-google-and-password/
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,11 +23,10 @@ export class AuthService {
     })
   }
 
-  
+
 
   async login(email: string, password: string) {
     var result = await this.afAuth.signInWithEmailAndPassword(email, password)
-    this.router.navigate(['admin/list']);
   }
 
   async register(email: string, password: string) {
@@ -35,7 +36,7 @@ export class AuthService {
 
   async sendEmailVerification() {
     await (await this.afAuth.currentUser).sendEmailVerification()
-    this.router.navigate(['admin/verify-email']);
+    this.router.navigate(['auth/verify-email']);
   }
 
   async sendPasswordResetEmail(passwordResetEmail: string) {
@@ -45,7 +46,7 @@ export class AuthService {
   async logout() {
     await this.afAuth.signOut();
     localStorage.removeItem('user');
-    this.router.navigate(['admin/login']);
+    this.router.navigate(['/']);
   }
 
   get isLoggedIn(): boolean {
@@ -55,6 +56,5 @@ export class AuthService {
 
   async loginWithGoogle() {
     await this.afAuth.signInWithPopup(new auth.GoogleAuthProvider())
-    this.router.navigate(['admin/list']);
   }
 }
