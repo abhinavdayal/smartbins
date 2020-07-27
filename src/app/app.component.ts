@@ -50,7 +50,6 @@ export class AppComponent implements OnInit {
   loggedin = false;
   logingoogle() {
     this.authService.loginWithGoogle().then(() => {
-      console.log(localStorage.getItem('user'))
       this.loggedin = true;
     })
   }

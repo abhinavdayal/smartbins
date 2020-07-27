@@ -2,16 +2,23 @@
   <mat-toolbar-row>
     <mat-icon class="iconmargin">delete_sweep</mat-icon>
     <span>Smartbins</span>
+    <a *ngIf="loggedin" mat-button [routerLink]="['/engage']">
+      <mat-icon class="iconmargin">star</mat-icon>
+      <span>Engage</span>
+    </a>
+    <a *ngIf="loggedin"  mat-button [routerLink]="['/manage']">
+      <mat-icon class="iconmargin">map</mat-icon>
+      <span>Manage</span>
+    </a>
     <span style="flex: 1 1 0"></span>
-    <button *ngIf="!loggedin" mat-button (click)="logingoogle()"><mat-icon class="iconmargin">login</mat-icon>Google Signin</button>
-    <button *ngIf="loggedin" mat-button (click)="logout()"><mat-icon class="iconmargin">highlight_off</mat-icon>Logout</button>
+    <button *ngIf="!loggedin" mat-button (click)="logingoogle()">
+      <mat-icon class="iconmargin">login</mat-icon>Google Signin
+    </button>
+    <button *ngIf="loggedin" mat-button (click)="logout()">
+      <mat-icon class="iconmargin">highlight_off</mat-icon>Logout
+    </button>
   </mat-toolbar-row>
 </mat-toolbar>
 <router-outlet></router-outlet>
-
-
-<agm-map *ngIf="!!location" [latitude]="location.latitude" [longitude]="location.longitude">
-  <agm-marker [latitude]="location.latitude" [longitude]="location.longitude"></agm-marker>
-</agm-map>
 
 <ng-snotify></ng-snotify>

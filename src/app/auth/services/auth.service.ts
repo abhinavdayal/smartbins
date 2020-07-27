@@ -14,6 +14,7 @@ export class AuthService {
 
   constructor(public afAuth: AngularFireAuth, public router: Router) {
     this.afAuth.authState.subscribe(user => {
+      console.log(user);
       if (user) {
         this.user = user;
         localStorage.setItem('user', JSON.stringify(this.user));
@@ -36,7 +37,7 @@ export class AuthService {
 
   async sendEmailVerification() {
     await (await this.afAuth.currentUser).sendEmailVerification()
-    this.router.navigate(['auth/verify-email']);
+    this.router.navigate(['admin/verify-email']);
   }
 
   async sendPasswordResetEmail(passwordResetEmail: string) {
