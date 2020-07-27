@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GeoLocation } from 'src/app/data/models';
 
 @Component({
   selector: 'app-home',
@@ -8,8 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
 
   constructor() { }
-
+  location:GeoLocation;
   ngOnInit(): void {
+    this.location = new GeoLocation(30, 50);
   }
 
 }

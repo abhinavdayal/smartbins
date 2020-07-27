@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { SnotifyService } from 'ng-snotify';
 import { AlertService } from './services/alert-service.service';
-import { GeolocationService } from './services/geolocation.service';
-import { GeoLocation } from './data/models';
+
+
 import { AuthService } from './auth/services/auth.service';
+import { User } from 'firebase';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,20 +16,15 @@ import { AuthService } from './auth/services/auth.service';
 export class AppComponent implements OnInit {
   title = 'smartbins';
   promptEvent: any;
-  location: GeoLocation = new GeoLocation(30, 50);
+  user$: Observable<User>;
 
   constructor(private snotifyService: SnotifyService, private swUpdate: SwUpdate,
     private router: Router, private alertService: AlertService, private swPush: SwPush,
-    private geolocationService: GeolocationService, private authService: AuthService
+    private authService: AuthService
   ) {
     window.addEventListener('beforeinstallprompt', event => {
       this.promptEvent = event;
     });
-
-    this.geolocationService.CurrentLocation.subscribe((l: GeoLocation) => {
-      this.location = l;
-    })
-
 
     // notify user to update progressive app if update available
     this.swUpdate.available.subscribe((event) => {
@@ -47,17 +44,12 @@ export class AppComponent implements OnInit {
     })
   }
 
-  loggedin = false;
   logingoogle() {
-    this.authService.loginWithGoogle().then(() => {
-      this.loggedin = true;
-    })
+    this.authService.loginWithGoogle();
   }
 
   logout() {
-    this.authService.logout().then(() => {
-      this.loggedin = false;
-    })
+    this.authService.logout();
   }
 
   installPwa(): void {
@@ -108,6 +100,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.location = new GeoLocation(30, 50);
+    this.user$ = this.authService.User;
   }
 }

@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { User } from 'firebase';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 // https://www.techiediaries.com/angular-firebase/angular-9-firebase-authentication-email-google-and-password/
 
@@ -10,17 +11,16 @@ import { User } from 'firebase';
   providedIn: 'root'
 })
 export class AuthService {
-  user: User;
-
+  _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  get User():Observable<User> {
+    return this._user.asObservable();
+  }
   constructor(public afAuth: AngularFireAuth, public router: Router) {
     this.afAuth.authState.subscribe(user => {
       console.log(user);
-      if (user) {
-        this.user = user;
-        localStorage.setItem('user', JSON.stringify(this.user));
-      } else {
-        localStorage.setItem('user', null);
-      }
+      this._user.next(user);
+      if(!!user) localStorage.setItem("STATUS", user.uid)
+      else localStorage.removeItem("STATUS");
     })
   }
 
@@ -51,8 +51,7 @@ export class AuthService {
   }
 
   get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null;
+    return !!localStorage.getItem("STATUS");
   }
 
   async loginWithGoogle() {
