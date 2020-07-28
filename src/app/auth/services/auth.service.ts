@@ -3,8 +3,9 @@ import { Router } from "@angular/router";
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { User } from 'firebase';
-import { Observable} from 'rxjs';
+import { Observable, Subject} from 'rxjs';
 import { SnotifyService } from 'ng-snotify';
+import { SmartbinUser } from 'src/app/data/models';
 
 // https://www.techiediaries.com/angular-firebase/angular-9-firebase-authentication-email-google-and-password/
 
@@ -12,6 +13,16 @@ import { SnotifyService } from 'ng-snotify';
   providedIn: 'root'
 })
 export class AuthService {
+
+  _smartbinUser: Subject<SmartbinUser> = new Subject<SmartbinUser>();
+
+  get smartbinUser() {
+    return this._smartbinUser.asObservable();
+  }
+
+  setSmartbinUser(u: SmartbinUser) {
+    this._smartbinUser.next(u)
+  }
 
   get User():Observable<User> {
     return this.afAuth.user;

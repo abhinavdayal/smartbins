@@ -2,11 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { SnotifyService } from 'ng-snotify';
-
+import { CrudService } from './data/crud.service'
 
 import { AuthService } from './auth/services/auth.service';
 import { User } from 'firebase';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators'
+import { SmartbinUser, GeoLocation } from './data/models';
+import { GeolocationService } from './services/geolocation.service'
+import { DocumentChangeAction } from '@angular/fire/firestore';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,10 +21,11 @@ export class AppComponent implements OnInit {
   title = 'smartbins';
   promptEvent: any;
   user: User;
+  binUser: SmartbinUser;
 
   constructor(private snotifyService: SnotifyService, private swUpdate: SwUpdate,
     private router: Router, private swPush: SwPush,
-    private authService: AuthService
+    private authService: AuthService, private crud: CrudService, private geoloc: GeolocationService
   ) {
     window.addEventListener('beforeinstallprompt', event => {
       this.promptEvent = event;
@@ -89,14 +95,39 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.User.subscribe((u:User)=>{
-      this.user = u;
-      console.log(u);
-      if(!this.user) {
-        this.authService.anonymousLogin();
+
+    this.geoloc.CurrentLocation.subscribe(l => {
+      if (!!this.binUser) {
+        this.binUser.recentLocation = l;
+        this.binUser.locationUpdated = Date.now();
+        this.crud.updateUserLoc(this.binUser);
       }
     })
-    
+
+    this.authService.smartbinUser.subscribe(u => {
+      this.binUser = u;
+    });
+
+    this.authService.User.subscribe((u: User) => {
+      this.user = u;
+      if (!this.user) {
+        this.authService.anonymousLogin();
+      } else {
+        // get or create firebase user
+        this.crud.FetchUser(u.email).subscribe((r: DocumentChangeAction<SmartbinUser>[]) => {
+          if (!!r && r.length > 0) {
+            // fetch user
+            this.authService.setSmartbinUser(r.map(e => { return { id: e.payload.doc.id, ...e.payload.doc.data() } })[0]);
+          } else {
+            // create a new user
+            this.crud.CreateUser(new SmartbinUser(u))
+          }
+        }), error => {
+          console.log(error)
+        }
+      }
+    })
+
   }
 
   linkanonymous() {

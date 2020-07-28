@@ -7,8 +7,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class GeolocationService {
   private _location: BehaviorSubject<GeoLocation> = new BehaviorSubject<GeoLocation>(null)
+  private intervalref: any;
+  private readonly updateinterval = 60000;
 
-  constructor() { }
+  constructor() { 
+    setInterval(()=>{
+      this.getLocations();
+    }, this.updateinterval)
+  }
 
   get CurrentLocation(): Observable<GeoLocation> {
     return this._location.asObservable();
@@ -21,6 +27,7 @@ export class GeolocationService {
       //use some 3rd party position solution(get position by your device ip)
       // like https://ipstack.com/
       //getPositionBy3rdParty();
+      this._location.next(new GeoLocation(0, 0))
     };
 
     /// locate the user
