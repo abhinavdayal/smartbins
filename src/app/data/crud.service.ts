@@ -13,9 +13,9 @@ export class CrudService {
 
   addBinUsage(record: Binusage) {
     return this.db.collection('Binuse').add(this.deepCopyFunction(record)).then((d)=>{
-      //console.log(d)
+      console.log(d)
     }).catch((e)=>{
-      //console.log(e)
+      console.log(e)
       this.notify.error(e.message, {timeout: 5000});
     })
   }
@@ -59,6 +59,12 @@ export class CrudService {
   FetchBinUse(uid: string): Observable<Binusage[]> {
     return this.db.collection<Binusage>('Binuse', ref => {
       return ref.where("usedby", "==", uid)
+    }).valueChanges()
+  }
+
+  FetchDuplciateBinUse(timestamp: number, binid: string): Observable<Binusage[]> {
+    return this.db.collection<Binusage>('Binuse', ref => {
+      return ref.where("time", "==", timestamp).where("bincode", "==", binid)
     }).valueChanges()
   }
 

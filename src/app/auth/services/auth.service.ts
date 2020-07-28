@@ -6,7 +6,6 @@ import { User } from 'firebase';
 import { Observable, Subject} from 'rxjs';
 import { SnotifyService } from 'ng-snotify';
 import { SmartbinUser } from 'src/app/data/models';
-import { timeout } from 'rxjs/operators';
 
 // https://www.techiediaries.com/angular-firebase/angular-9-firebase-authentication-email-google-and-password/
 
