@@ -176,7 +176,7 @@ export class AppComponent implements OnInit {
           s.recentLocation = this.curloc;
           s.locationUpdated = Date.now();
           s.id = this.binUser.id;
-          this.crud.update(s, "User")
+          this.crud.update(s, "Users")
           this.authService.setSmartbinUser(s);
         }).catch((e) => {
           //console.log(e);
@@ -198,7 +198,7 @@ export class AppComponent implements OnInit {
       //console.log(this.binUser)
       if (!this.binUser.name && !!this.user.displayName)
         this.binUser.name = this.user.displayName;
-      this.crud.update(this.binUser, "User");
+      this.crud.update(this.binUser, "Users");
     }
   }
 
