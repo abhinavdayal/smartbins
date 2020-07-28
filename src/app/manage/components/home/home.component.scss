@@ -1,3 +1,63 @@
-agm-map {
-    height: 300px
+.container {
+    width: 100%;
+    height: calc(100vh - 65px);
+}
+
+.map {
+    height: 100%;
+    padding: 0;
+}
+
+.sidenav {
+    width: 300px;
+}
+
+@media (max-width: 600px) {
+    .sidenav {
+        width: 100%;
+    }
+}
+
+.openbtn {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+
+.addbtn {
+    display: block;
+    margin: 20px auto;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.details {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    border-radius: 0;
+    .content {
+        text-align: center;
+        padding: 20px;
+    }
+}
+
+.detailsopened {
+    height: 100%;
+}
+
+.selected {
+    color: white !important;
+    background-color: #3F51B5 !important;
+    mat-icon {
+        color: white !important
+    }
+}
+
+.listoption {
+    cursor: pointer;
 }

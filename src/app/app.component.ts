@@ -110,6 +110,9 @@ export class AppComponent implements OnInit {
     })
 
     this.authService.smartbinUser.subscribe(u => {
+      if (!!u) {
+        this.geoloc.start()
+      } else (this.geoloc.end())
       this.binUser = u;
     });
 
@@ -168,7 +171,7 @@ export class AppComponent implements OnInit {
       if (!!result) {
         this.authService.linkWithGoogle(this.user).then(u => {
           //console.log(u);
-          u.user.updateProfile({displayName: result})
+          u.user.updateProfile({ displayName: result })
           let s = new SmartbinUser(u.user, result);
           s.recentLocation = this.curloc;
           s.locationUpdated = Date.now();
@@ -193,6 +196,8 @@ export class AppComponent implements OnInit {
       this.binUser.recentLocation = l;
       this.binUser.locationUpdated = Date.now();
       console.log(this.binUser)
+      if (!this.binUser.name && !!this.user.displayName)
+        this.binUser.name = this.user.displayName;
       this.crud.update(this.binUser, "User");
     }
   }

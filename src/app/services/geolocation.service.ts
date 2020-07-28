@@ -10,11 +10,20 @@ export class GeolocationService {
   private intervalref: any;
   private readonly updateinterval = 60000;
 
-  constructor() { 
+  constructor() {
     this.getLocations();
-    this.intervalref = setInterval(()=>{
-      this.getLocations();
-    }, this.updateinterval)
+  }
+
+  start() {
+    if (!this.intervalref) {
+      this.intervalref = setInterval(() => {
+        this.getLocations();
+      }, this.updateinterval)
+    }
+  }
+
+  end() {
+    if (this.intervalref) clearInterval(this.intervalref)
   }
 
   get CurrentLocation(): Observable<GeoLocation> {

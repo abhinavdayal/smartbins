@@ -1,1 +1,72 @@
-<app-map></app-map>>
+<!--https://asymmetrik.com/ngx-leaflet-tutorial-angular-cli/-->
+<!-- update the map with points of bins in icons of various colors. 
+    Use some nice icon and color should indicate status-->
+<!-- alongside map show some statistics-->
+
+<mat-sidenav-container class="container">
+    <mat-sidenav class="sidenav" #sidenav position="end" mode="side" opened>
+        <mat-toolbar>
+            <mat-toolbar-row>
+                <h1>Bins</h1>
+                <span style="flex: 1 1 0"></span>
+                <button mat-icon-button (click)="sidenav.close()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <mat-list role="list">
+            <mat-list-item [ngClass]="{'selected': !!selectedbin && selectedbin.id==bin.id, 'listoption':true}"
+                (click)="selectedbin=bin; details.open()" role="listitem" *ngFor="let bin of bins">
+                <mat-icon style="margin-right: 8px;">delete_outline</mat-icon>{{bin.name}}
+            </mat-list-item>
+        </mat-list>
+        <button [disabled]="!!getlocation || !!selectedbin" matTooltip="Add Bin" mat-mini-fab class="addbtn" (click)="addpanel.open();">
+            <mat-icon>add</mat-icon>
+        </button>
+        <mat-expansion-panel style="box-shadow: none;" #addpanel (opened)="getlocation=true"
+            (closed)="getlocation=false">
+            <mat-form-field class="full-width">
+                <mat-label>Name</mat-label>
+                <input type="text" matInput placeholder="Helpful name for bin" [(ngModel)]="nbinname" required>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Capacity (in litres)</mat-label>
+                <input type="number" matInput placeholder="Capacity in Litres" [(ngModel)]="nbincapacity" required>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Bin Type</mat-label>
+                <mat-select [(ngModel)]='nbintype' required>
+                    <mat-option *ngFor="let b of bintypes" [value]="b">
+                        {{b | titlecase}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <p>Pick a location on map</p>
+            <p><strong>Latitude</strong>: {{selectedloc.latitude}}</p>
+            <p><strong>Longitude</strong>: {{selectedloc.longitude}}</p>
+
+            <button [disabled]="!nbinname || !nbintype || !nbincapacity || !selectedloc.valid"
+                (click)="addBin(nbinname, selectedloc.latitude, selectedloc.longitude, nbincapacity, nbintype)"
+                mat-raised-button color="primary">
+                <mat-icon style="margin-right: 8px;">delete</mat-icon> Add bin
+            </button>
+            <button style="margin-left: 20px" (click)="addpanel.close()" mat-raised-button color="warn">
+                <mat-icon style="margin-right: 8px;">cancel</mat-icon> Cancel
+            </button>
+        </mat-expansion-panel>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <app-map [bins]="mapbins" [getlocation]="getlocation" (latlong)="selectedloc = $event"></app-map>
+        <button *ngIf="!sidenav.isOpen" mat-mini-fab mat-icon-button (click)="sidenav.toggle()" class="openbtn">
+            <mat-icon>keyboard_backspace</mat-icon>
+        </button>
+        <mat-expansion-panel #details [ngClass]="{'details':true, 'detailsopened':!!selectedbin}">
+            <div class="content" *ngIf="selectedbin" fxLayout="column" fxLayoutAlign="center center">
+                <p>TODO: Load details for this bin. For example we can show the stats and also load the binusade for
+                    last 30 days for this bin to show chart. we can also display daily time wise charts</p>
+                <p>{{selectedbin.name}}</p>
+                <button mat-mini-fab (click)="details.close(); selectedbin=null"><mat-icon>close</mat-icon></button>
+            </div>
+        </mat-expansion-panel>
+    </mat-sidenav-content>
+</mat-sidenav-container>

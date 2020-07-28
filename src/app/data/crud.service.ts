@@ -23,11 +23,12 @@ export class CrudService {
 
 
   update(record: any, collection: string) {
-    this.db.doc(`${collection}/${record.id}`).update(this.deepCopyFunction(record));
+    //this.db.doc(`${collection}/${record.id}`).update(this.deepCopyFunction(record));
+    return this.db.collection(collection).doc(record.id).update(this.deepCopyFunction(record))
   }
 
   delete(record: any, collection: string) {
-    this.db.doc(`${collection}/${record.id}`).delete();
+    return this.db.doc(`${collection}/${record.id}`).delete();
   }
 
   fetch(id: string, collection: string) {
@@ -92,6 +93,12 @@ export class CrudService {
     return this.db.collection<Binusage>('Binuse', ref => {
       return ref.where("usedby", "==", id).where("time", ">=", start)
     }).valueChanges()
+  }
+
+  fetchMyBins(id:string) {
+    return this.db.collection<Bin>('Bins', ref => {
+      return ref.where("manager", "==", id)
+    }).snapshotChanges()
   }
 
   FetchDuplciateBinUse(timestamp: number, binid: string): Observable<Binusage[]> {

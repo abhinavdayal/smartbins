@@ -23,20 +23,22 @@ export class SmartbinUser {
 
 export class Bin {
     id: string;
+    name: string;
     currentLocation: GeoLocation;
     capacityLitres: number;
     type: string;
-    binManager: string;
+    manager: string;
     resetDate: number;
     lastUsed: number;
     total_use_count: number;
     total_weight_thrown: number;
 
-    constructor(user: SmartbinUser, capacity: number, type: string) {
-        this.binManager = user.uid;
+    constructor(user: SmartbinUser, capacity: number, type: string, name: string, lat?: number, lon?:number) {
+        this.manager = user.id;
+        this.name = name;
         this.resetDate = Date.now();
         this.lastUsed = Date.now();
-        this.currentLocation= user.recentLocation;
+        this.currentLocation= !!lat && !!lon? new GeoLocation(lat, lon) : user.recentLocation;
         this.type=type;
         this.total_use_count = 0;
         this.total_weight_thrown = 0;
