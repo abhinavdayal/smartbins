@@ -17,7 +17,6 @@ export class AuthService {
   }
   constructor(public afAuth: AngularFireAuth, public router: Router) {
     this.afAuth.authState.subscribe(user => {
-      console.log(user);
       this._user.next(user);
       if(!!user) localStorage.setItem("STATUS", user.uid)
       else localStorage.removeItem("STATUS");
@@ -25,6 +24,9 @@ export class AuthService {
   }
 
 
+  async anonymousLogin() {
+    return this.afAuth.signInAnonymously()
+  }
 
   async login(email: string, password: string) {
     var result = await this.afAuth.signInWithEmailAndPassword(email, password)

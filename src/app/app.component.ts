@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { SnotifyService } from 'ng-snotify';
-import { AlertService } from './services/alert-service.service';
 
 
 import { AuthService } from './auth/services/auth.service';
@@ -16,10 +15,10 @@ import { Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'smartbins';
   promptEvent: any;
-  user$: Observable<User>;
+  user: User;
 
   constructor(private snotifyService: SnotifyService, private swUpdate: SwUpdate,
-    private router: Router, private alertService: AlertService, private swPush: SwPush,
+    private router: Router, private swPush: SwPush,
     private authService: AuthService
   ) {
     window.addEventListener('beforeinstallprompt', event => {
@@ -30,16 +29,6 @@ export class AppComponent implements OnInit {
     this.swUpdate.available.subscribe((event) => {
       if (window.confirm("An update is available, do you want to reload?")) {
         window.location.reload();
-      }
-    })
-
-    this.alertService.getAlert().subscribe(r => {
-      if (r) {
-        if (r.type == "error")
-          this.snotifyService.error(r.text)
-        else if (r.type == "success")
-          this.snotifyService.success(r.text)
-        else this.snotifyService.simple(r.text)
       }
     })
   }
@@ -100,6 +89,13 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user$ = this.authService.User;
+    this.authService.User.subscribe((u:User)=>{
+      this.user = u;
+      console.log(u);
+      if(!this.user) {
+        this.authService.anonymousLogin();
+      }
+    })
+    
   }
 }

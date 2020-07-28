@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row *ngIf="user$ | async as user else notloggedin">
+  <mat-toolbar-row>
     <a class="lead" mat-button [routerLink]="['/']">
       <mat-icon class="iconmargin">delete_sweep</mat-icon>
       <span>Smartbins</span>
@@ -17,7 +17,10 @@
     <button *ngIf="!user" mat-button (click)="logingoogle()">
       <mat-icon class="iconmargin">login</mat-icon>Google Signin
     </button>
-    <button mat-button [matMenuTriggerFor]="menu">{{user.displayName}}</button>
+    <button mat-button [matMenuTriggerFor]="menu">
+      <span *ngIf="!!user.displayName">{{user.displayName}}</span>
+      <span *ngIf="!user.displayName">Anonymous</span>
+    </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="logout()">
         <mat-icon>highlight_off</mat-icon>
@@ -26,16 +29,6 @@
     </mat-menu>
     <img *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
   </mat-toolbar-row>
-  <ng-template #notloggedin>
-    <mat-toolbar-row>
-      <mat-icon class="iconmargin">delete_sweep</mat-icon>
-      <span>Smartbins</span>
-      <span style="flex: 1 1 0"></span>
-      <button mat-button (click)="logingoogle()">
-        <mat-icon class="iconmargin">login</mat-icon>Google Signin
-      </button>
-    </mat-toolbar-row>
-  </ng-template>
 </mat-toolbar>
 <router-outlet></router-outlet>
 
