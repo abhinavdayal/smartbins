@@ -98,4 +98,12 @@ export class AppComponent implements OnInit {
     })
     
   }
+
+  linkanonymous() {
+    this.authService.linkWithGoogle(this.user);
+  }
+
+  changeuser() {
+    this.authService.loginWithGoogle();
+  }
 }
