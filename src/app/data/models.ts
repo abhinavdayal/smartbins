@@ -1,8 +1,8 @@
 import { User } from 'firebase';
 
 export class SmartbinUser {
-    id: string;
-    uid: string;
+    id: string; //firebase id
+    uid: string; // google id
     email: string;
     name: string;
     role: string;
@@ -13,21 +13,22 @@ export class SmartbinUser {
         this.uid = user.uid;
         this.email = user.email;
         this.name = user.displayName;
+        this.role="user";
     }
  }
 
-export interface Bin {
-    id: string
+export class Bin {
+    id: string;
     code: string;
     currentLocation: GeoLocation;
     capacityLitres: number;
-    type: string,
+    type: string;
     binManager: string;
     resetDate: number;
     lastUsed: number;
 }
 
-export interface Binusage {
+export class Binusage {
     bincode: string;
     usedby: string;
     time: number;
@@ -35,13 +36,13 @@ export interface Binusage {
     currentlevel_percent: number;
 }
 
-export interface BinWorker {
+export class BinWorker {
     userid: string;
     managerid: string;
     binids: Array<string>;
 }
 
-export interface BinManager {
+export class BinManager {
     userid: string;
 }
 

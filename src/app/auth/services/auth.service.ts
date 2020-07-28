@@ -14,9 +14,9 @@ import { SmartbinUser } from 'src/app/data/models';
 })
 export class AuthService {
 
-  _smartbinUser: Subject<SmartbinUser> = new Subject<SmartbinUser>();
+  private _smartbinUser: Subject<SmartbinUser> = new Subject<SmartbinUser>();
 
-  get smartbinUser() {
+  get smartbinUser(): Observable<SmartbinUser> {
     return this._smartbinUser.asObservable();
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 //import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';  // Firebase modules for Database, Data list and Single object
-import { SmartbinUser } from './models'
+import { SmartbinUser, Binusage } from './models'
 import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { SnotifyService } from 'ng-snotify';
@@ -9,6 +9,16 @@ import { SnotifyService } from 'ng-snotify';
   providedIn: 'root'
 })
 export class CrudService {
+
+
+  addBinUsage(record: Binusage) {
+    return this.db.collection('Binuse').add(this.deepCopyFunction(record)).then((d)=>{
+      //console.log(d)
+    }).catch((e)=>{
+      //console.log(e)
+      this.notify.error(e.message, {timeout: 5000});
+    })
+  }
 
 
   constructor(private db: AngularFirestore, private notify: SnotifyService) { }
@@ -35,13 +45,13 @@ export class CrudService {
 
 
   CreateUser(record: any) {
-    console.log("Creating User", record)
+    //console.log("Creating User", record)
     // used ... to convert to plain object
     // https://stackoverflow.com/questions/54171903/function-collectionreference-add-requires-its-first-argument-to-be-of-type-obj
     return this.db.collection('Users').add(this.deepCopyFunction(record)).then((d)=>{
-      console.log(d)
+      //console.log(d)
     }).catch((e)=>{
-      console.log(e)
+      //console.log(e)
       this.notify.error(e.message, {timeout: 5000});
     })
   }

@@ -114,16 +114,20 @@ export class AppComponent implements OnInit {
         this.authService.anonymousLogin();
       } else {
         // get or create firebase user
-        this.crud.FetchUser(u.email).subscribe((r: DocumentChangeAction<SmartbinUser>[]) => {
-          if (!!r && r.length > 0) {
-            // fetch user
-            this.authService.setSmartbinUser(r.map(e => { return { id: e.payload.doc.id, ...e.payload.doc.data() } })[0]);
-          } else {
-            // create a new user
-            this.crud.CreateUser(new SmartbinUser(u))
+        // anonymous dont work well: TODO
+        if (!!u.email) {
+          this.crud.FetchUser(u.email).subscribe((r: DocumentChangeAction<SmartbinUser>[]) => {
+            //this.snotifyService.success("loggedin", {timeout: 5000});
+            if (!!r && r.length > 0) {
+              // fetch user
+              this.authService.setSmartbinUser(r.map(e => { return { id: e.payload.doc.id, ...e.payload.doc.data() } as SmartbinUser })[0]);
+            } else {
+              // create a new user
+              this.crud.CreateUser(new SmartbinUser(u))
+            }
+          }), error => {
+            console.log(error)
           }
-        }), error => {
-          console.log(error)
         }
       }
     })
@@ -138,3 +142,9 @@ export class AppComponent implements OnInit {
     this.authService.loginWithGoogle();
   }
 }
+
+
+// QR CODE FORMAT
+// ime in unix epoch format
+// https://smart-bins-vitb.firebase-app.io/engage/binuse/encryptedmessage
+// t=1595921336&l=65&w=1467&bid=kjsdfyiu23
