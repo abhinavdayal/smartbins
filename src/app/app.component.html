@@ -9,35 +9,39 @@
       <mat-icon class="iconmargin">star</mat-icon>
       <span>Engage</span>
     </a>
-    <a *ngIf="!!user && !!user.displayName" mat-button [routerLink]="['/manage']">
+    <a *ngIf="!!user && !user.isAnonymous" mat-button [routerLink]="['/manage']">
       <mat-icon class="iconmargin">map</mat-icon>
       <span>Manage</span>
     </a>
     <span style="flex: 1 1 0"></span>
-    <button *ngIf="!user" mat-button (click)="logingoogle()">
-      <mat-icon class="iconmargin">login</mat-icon>Google Signin
+    <button *ngIf="!user" mat-button (click)="openLoginDialog()">
+      <mat-icon class="iconmargin">login</mat-icon>Sign in
     </button>
     <button *ngIf="!!user" mat-button [matMenuTriggerFor]="menu">
-      <span *ngIf="!!user.displayName">{{user.displayName}}</span>
-      <span *ngIf="!user.displayName">Anonymous</span>
+      <span *ngIf="!user.isAnonymous">{{user.displayName}}</span>
+      <span *ngIf="user.isAnonymous">Anonymous</span>
+      <img *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
     </button>
-    <mat-menu  #menu="matMenu">
-      <button *ngIf="!!user && !user.displayName" mat-menu-item (click)="linkanonymous()">
+    <mat-menu #menu="matMenu">
+      <button *ngIf="!!user && user.isAnonymous" mat-menu-item (click)="openProfileDialog()">
         <mat-icon>account_circle</mat-icon>
         <span>Link Account</span>
       </button>
-      <button *ngIf="!!user && !!user.displayName" mat-menu-item (click)="changeuser()">
+      <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
         <mat-icon>account_circle</mat-icon>
         <span>Switch User</span>
-      </button>
-      <!-- <button mat-menu-item (click)="logout()">
+      </button> -->
+      <button mat-menu-item (click)="logout()">
         <mat-icon>account_circle</mat-icon>
         <span>Logout</span>
-      </button> -->
+      </button>
     </mat-menu>
-    <img *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
+    
   </mat-toolbar-row>
 </mat-toolbar>
+<div class="warning" *ngIf="!!user && user.isAnonymous">
+  <p>If you close this session without signing in you will lose all Anonymous credits!</p>
+</div>
 <router-outlet></router-outlet>
 
 <ng-snotify></ng-snotify>

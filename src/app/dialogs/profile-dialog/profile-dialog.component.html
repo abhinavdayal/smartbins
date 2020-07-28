@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Awesome!</h1>
+<div mat-dialog-content>
+  <p>Please set your name</p>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="name" required>
+    <mat-hint>Name is required</mat-hint>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [disabled]="!name" (click)="sendName()">Ok</button>
+</div>

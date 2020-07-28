@@ -1,6 +1,7 @@
 .userimage {
     height: 40px;
     border-radius: 20px;
+    margin-left: 10px;
 }
 
 .iconmargin {
@@ -9,4 +10,10 @@
 
 .lead {
     font-size: 20px;
+}
+
+.warning {
+    text-align: center;
+    font-weight: bold;
+    background-color: lightyellow;
 }

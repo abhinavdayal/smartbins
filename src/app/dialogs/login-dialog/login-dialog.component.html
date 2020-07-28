@@ -1,0 +1,17 @@
+<h1 style="text-align: center;" mat-dialog-title>Welcome</h1>
+<div mat-dialog-content>
+    <p style="text-align: center; text-decoration: underline;">How would you like to continue?</p>
+
+    <p><strong>Anonymous</strong>: Try it out and later link to your account to reap benefits.</p>
+    <p><strong>Sign In</strong>: Start the benefits right away</p>
+    <mat-divider></mat-divider>
+</div>
+<div style="text-align: center;" fxLayout="column" fxLayoutAlign="center center">
+    <h2>Sign in with</h2>
+    <div fxLayout="row wrap" fxLayoutAlign="center center">
+        <button class="action" mat-raised-button color="accent" (click)="onSelect('anonymous')">Anonymous</button>
+        <button class="action" mat-raised-button color="primary" (click)="onSelect('google')">Google</button>
+        <button class="action" mat-raised-button color="warn" (click)="onSelect('cancel')"
+            cdkFocusInitial>Cancel</button>
+    </div>
+</div>

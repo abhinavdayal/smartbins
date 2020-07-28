@@ -9,10 +9,10 @@ export class SmartbinUser {
     recentLocation: GeoLocation;
     locationUpdated: number;
 
-    constructor(user: User) {
+    constructor(user: User, name?:string) {
         this.uid = user.uid;
         this.email = user.email;
-        this.name = user.displayName;
+        this.name = !!name? name : user.displayName;
         this.role="user";
     }
  }

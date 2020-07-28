@@ -11,6 +11,7 @@ export class GeolocationService {
   private readonly updateinterval = 60000;
 
   constructor() { 
+    this.getLocations();
     this.intervalref = setInterval(()=>{
       this.getLocations();
     }, this.updateinterval)

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/home/home.component';
 import { ManageRoutingModule } from './manage-routing.module';
 import { MapsModule } from "src/app/maps/maps.module"
+import { AngularMaterialModule } from '../angular-material.module';
 
 // this module is for user to manage the bins
 
@@ -11,7 +12,8 @@ import { MapsModule } from "src/app/maps/maps.module"
   imports: [
     CommonModule,
     ManageRoutingModule,
-    MapsModule
+    MapsModule,
+    AngularMaterialModule
   ]
 })
 export class ManageModule { }

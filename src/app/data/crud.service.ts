@@ -56,13 +56,19 @@ export class CrudService {
     })
   }
 
-  FetchUser(email: string): Observable<DocumentChangeAction<SmartbinUser>[]> {
+  FetchBinUse(uid: string): Observable<Binusage[]> {
+    return this.db.collection<Binusage>('Binuse', ref => {
+      return ref.where("usedby", "==", uid)
+    }).valueChanges()
+  }
+
+  FetchUser(uid: string): Observable<DocumentChangeAction<SmartbinUser>[]> {
     return this.db.collection<SmartbinUser>('Users', ref => {
-      return ref.where("email", "==", email)
+      return ref.where("uid", "==", uid)
     }).snapshotChanges()
   }
 
-  updateUserLoc(binUser: SmartbinUser) {
+  updateUser(binUser: SmartbinUser) {
     this.db.doc('Users/' + binUser.id).update(this.deepCopyFunction(binUser));
   }
 
