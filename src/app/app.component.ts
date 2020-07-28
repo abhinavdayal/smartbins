@@ -128,7 +128,7 @@ export class AppComponent implements OnInit {
           //this.snotifyService.success("loggedin", {timeout: 5000});
           if (!!r && r.length > 0) {
             // fetch user
-            console.log(r);
+            //console.log(r);
             let s = r.map(e => { return { id: e.payload.doc.id, ...e.payload.doc.data() } as SmartbinUser })[0];
             this.authService.setSmartbinUser(s);
           } else {
@@ -136,10 +136,10 @@ export class AppComponent implements OnInit {
             let s = new SmartbinUser(u);
             s.recentLocation = this.curloc;
             s.locationUpdated = Date.now();
-            this.crud.create(s, "User")
+            this.crud.create(s, "Users")
           }
         }), error => {
-          console.log(error)
+          //console.log(error)
         }
 
       }
@@ -195,7 +195,7 @@ export class AppComponent implements OnInit {
     if (!!this.binUser) {
       this.binUser.recentLocation = l;
       this.binUser.locationUpdated = Date.now();
-      console.log(this.binUser)
+      //console.log(this.binUser)
       if (!this.binUser.name && !!this.user.displayName)
         this.binUser.name = this.user.displayName;
       this.crud.update(this.binUser, "User");

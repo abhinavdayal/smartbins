@@ -24,7 +24,10 @@ export class CrudService {
 
   update(record: any, collection: string) {
     //this.db.doc(`${collection}/${record.id}`).update(this.deepCopyFunction(record));
-    return this.db.collection(collection).doc(record.id).update(this.deepCopyFunction(record))
+    //console.log(record)
+    return this.db.collection(collection).doc(record.id).update(this.deepCopyFunction(record)).catch(e=>{
+      this.notify.error(e.message)
+    })
   }
 
   delete(record: any, collection: string) {
