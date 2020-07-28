@@ -1,3 +1,26 @@
-<mat-list role="list">
-    <mat-list-item role="listitem" *ngFor="let u of binuse">{{u.time}}, {{u.bincode}}, {{u.usedby}}, {{u.currentweight_gm}}, {{u.currentlevel_percent}}</mat-list-item>
+<mat-list *ngIf="user" role="list">
+    <!-- TODO Make it a timeline kind of chart to show last 30 day usage-->
+    <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage">{{u.time}}, {{u.bincode}}, {{u.usedby}}, {{u.currentweight_gm}}, {{u.currentlevel_percent}}</mat-list-item>
 </mat-list>
+
+<!--
+    TODO, display the total useage from userprofile
+    {{user.total_use_count}} {{user.total_weight_thrown}}
+    and current month use
+    {{currentMonthUse}} {{currentMonthWeight}}
+
+    write a custom angular pipe to formt weight from gm to kg if need and add units
+-->
+
+<!--
+    plot chart (use any charting library that you can get to work quickly)
+    for this year monthly usage (bar chart with months)
+    index 0 = Jan, 1 = Feb and so on
+    data is in monthlyprofiles array.
+-->
+
+<!--
+    NEXT plot chart for how you compare with the globe this month
+    get the data from histogram which has bins. 
+    Show pointer for this months use from user's this month montly profile (the last one)
+-->

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 //import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';  // Firebase modules for Database, Data list and Single object
-import { SmartbinUser, Binusage } from './models'
+import { SmartbinUser, Binusage, Bin, MonthlyHistogram, MonthlyProfile } from './models'
 import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { SnotifyService } from 'ng-snotify';
@@ -10,18 +10,58 @@ import { SnotifyService } from 'ng-snotify';
 })
 export class CrudService {
 
+  constructor(private db: AngularFirestore, private notify: SnotifyService) { }
 
-  addBinUsage(record: Binusage) {
-    return this.db.collection('Binuse').add(this.deepCopyFunction(record)).then((d)=>{
-      console.log(d)
+  create(record: any, collection: string) {
+    return this.db.collection(collection).add(this.deepCopyFunction(record)).then((d)=>{
+      //console.log(d)
     }).catch((e)=>{
-      console.log(e)
+      //console.log(e)
       this.notify.error(e.message, {timeout: 5000});
     })
   }
 
 
-  constructor(private db: AngularFirestore, private notify: SnotifyService) { }
+  update(record: any, collection: string) {
+    this.db.doc(`${collection}/${record.id}`).update(this.deepCopyFunction(record));
+  }
+
+  delete(record: any, collection: string) {
+    this.db.doc(`${collection}/${record.id}`).delete();
+  }
+
+  fetch(id: string, collection: string) {
+    return this.db.doc(`${collection}/${id}`).get();
+  }
+
+  fetchHistogram() {
+    let d = new Date();
+    return this.db.collection<MonthlyHistogram>('MonthlyHistogram', ref => {
+      return ref.where("month", "==", d.getMonth()).where("year", "==", d.getFullYear())
+    }).valueChanges()
+  }
+
+  fetchCurrentHist() {
+    let d = new Date();
+    return this.db.collection<MonthlyHistogram>('MonthlyHistogram', ref => {
+      return ref.where("month", "==", d.getMonth()).where("year", "==", d.getFullYear())
+    }).snapshotChanges()
+  }
+
+  fetchCurrentYearMonthlyProfiles(userid: string) {
+    let d = new Date();
+    return this.db.collection<MonthlyProfile>('MonthlyProfile', ref => {
+      return ref.where("month", "==", d.getMonth()).where("year", "==", d.getFullYear()).where("userid", "==", userid)
+    }).valueChanges()
+  }
+
+  fetchMonthlyProfile(userid: string) {
+    let d = new Date();
+    return this.db.collection<MonthlyProfile>('MonthlyProfile', ref => {
+      return ref.where("month", "==", d.getMonth()).where("year", "==", d.getFullYear()).where("userid", "==", userid)
+    }).snapshotChanges()
+  }
+
 
   deepCopyFunction(inObject: any) {
     let outObject, value, key
@@ -44,21 +84,13 @@ export class CrudService {
   }
 
 
-  CreateUser(record: any) {
-    //console.log("Creating User", record)
-    // used ... to convert to plain object
-    // https://stackoverflow.com/questions/54171903/function-collectionreference-add-requires-its-first-argument-to-be-of-type-obj
-    return this.db.collection('Users').add(this.deepCopyFunction(record)).then((d)=>{
-      //console.log(d)
-    }).catch((e)=>{
-      //console.log(e)
-      this.notify.error(e.message, {timeout: 5000});
-    })
-  }
+  FetchCurrentMonthBinUse(id: string): Observable<Binusage[]> {
+    let s = new Date();
+    let monthbeginning = new Date(s.getFullYear(), s.getMonth(), 1, 0, 0, 0, 0)
 
-  FetchBinUse(uid: string): Observable<Binusage[]> {
+    let start = Date.now() - monthbeginning.valueOf();
     return this.db.collection<Binusage>('Binuse', ref => {
-      return ref.where("usedby", "==", uid)
+      return ref.where("usedby", "==", id).where("time", ">=", start)
     }).valueChanges()
   }
 
@@ -72,10 +104,6 @@ export class CrudService {
     return this.db.collection<SmartbinUser>('Users', ref => {
       return ref.where("uid", "==", uid)
     }).snapshotChanges()
-  }
-
-  updateUser(binUser: SmartbinUser) {
-    this.db.doc('Users/' + binUser.id).update(this.deepCopyFunction(binUser));
   }
 
 }

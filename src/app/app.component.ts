@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
             let s = new SmartbinUser(u);
             s.recentLocation = this.curloc;
             s.locationUpdated = Date.now();
-            this.crud.CreateUser(s)
+            this.crud.create(s, "User")
           }
         }), error => {
           console.log(error)
@@ -173,7 +173,8 @@ export class AppComponent implements OnInit {
           s.recentLocation = this.curloc;
           s.locationUpdated = Date.now();
           s.id = this.binUser.id;
-          this.crud.updateUser(s)
+          this.crud.update(s, "User")
+          this.authService.setSmartbinUser(s);
         }).catch((e) => {
           //console.log(e);
           if (e.code == 'auth/credential-already-in-use') {
@@ -191,7 +192,8 @@ export class AppComponent implements OnInit {
     if (!!this.binUser) {
       this.binUser.recentLocation = l;
       this.binUser.locationUpdated = Date.now();
-      this.crud.updateUser(this.binUser);
+      console.log(this.binUser)
+      this.crud.update(this.binUser, "User");
     }
   }
 
