@@ -8,7 +8,7 @@ import { AuthService } from './auth/services/auth.service';
 import { User } from 'firebase';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators'
-import { SmartbinUser, GeoLocation } from './data/models';
+import { SmartbinUser, GeoLocation, COLLECTIONS } from './data/models';
 import { GeolocationService } from './services/geolocation.service'
 import { DocumentChangeAction } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,6 +42,10 @@ export class AppComponent implements OnInit {
         window.location.reload();
       }
     })
+  }
+
+  get mobile() {
+    return this.authService.mobile;
   }
 
   logingoogle() {
@@ -136,7 +140,7 @@ export class AppComponent implements OnInit {
             let s = new SmartbinUser(u);
             s.recentLocation = this.curloc;
             s.locationUpdated = Date.now();
-            this.crud.create(s, "Users")
+            this.crud.create(s, COLLECTIONS.USERS)
           }
         }), error => {
           //console.log(error)
@@ -176,7 +180,7 @@ export class AppComponent implements OnInit {
           s.recentLocation = this.curloc;
           s.locationUpdated = Date.now();
           s.id = this.binUser.id;
-          this.crud.update(s, "Users")
+          this.crud.update(s, COLLECTIONS.USERS)
           this.authService.setSmartbinUser(s);
         }).catch((e) => {
           //console.log(e);
@@ -198,7 +202,7 @@ export class AppComponent implements OnInit {
       //console.log(this.binUser)
       if (!this.binUser.name && !!this.user.displayName)
         this.binUser.name = this.user.displayName;
-      this.crud.update(this.binUser, "Users");
+      this.crud.update(this.binUser, COLLECTIONS.USERS);
     }
   }
 

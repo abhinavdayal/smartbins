@@ -1,5 +1,13 @@
 import { User } from 'firebase';
 
+export class  COLLECTIONS {
+    static readonly USERS = 'Users';
+    static readonly BINS = 'Bins';
+    static readonly BINUSAGE = 'BinUsages';
+    static readonly MONTHLYPROFILE = 'MonthlyProfiles';
+    static readonly MONTHLYHIST = 'MonthlyHistograms';
+}
+
 export class SmartbinUser {
     id: string; //firebase id
     uid: string; // google id
@@ -23,6 +31,7 @@ export class SmartbinUser {
 
 export class Bin {
     id: string;
+    code: string;
     name: string;
     currentLocation: GeoLocation;
     capacityLitres: number;
@@ -32,8 +41,11 @@ export class Bin {
     lastUsed: number;
     total_use_count: number;
     total_weight_thrown: number;
+    current_level: number;
+    current_weight: number;
 
-    constructor(user: SmartbinUser, capacity: number, type: string, name: string, lat?: number, lon?:number) {
+    constructor(code: string, user: SmartbinUser, capacity: number, type: string, name: string, lat?: number, lon?:number) {
+        this.code = code;
         this.manager = user.id;
         this.name = name;
         this.resetDate = Date.now();
@@ -42,7 +54,26 @@ export class Bin {
         this.type=type;
         this.total_use_count = 0;
         this.total_weight_thrown = 0;
+        this.current_level = 0;
+        this.current_weight = 0;
         this.capacityLitres = capacity;
+    }
+}
+
+// NOT SECURE, eventuyally a node service.
+export class ScanData {
+    //secretkey: 'key'
+    time: number;
+    code: string;
+    level: number;
+    weight: number;
+
+    constructor(encryptedmsg) {
+        // TODO populate from encrypted message
+        this.time = 1595937020*1000; // to convert to millisecond
+        this.code = 'abcd1234'
+        this.level = 45
+        this.weight = 365
     }
 }
 
@@ -53,6 +84,15 @@ export class Binusage {
     time: number;
     currentweight_gm: number;
     currentlevel_percent: number;
+
+    constructor(data: ScanData, user: SmartbinUser, bin: Bin) {
+        //TODO: popylate from ecryoted message
+        this.binid = bin.id;
+        this.usedby = user.id
+        this.time = data.time
+        this.currentlevel_percent = data.level
+        this.currentweight_gm = data.weight
+    }
 }
 
 export class BinWorker {

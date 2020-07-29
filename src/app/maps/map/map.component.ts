@@ -1,6 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { latLng, tileLayer, marker, icon, circle } from 'leaflet';
 import { GeoLocation } from 'src/app/data/models';
+import { Subscription } from 'rxjs';
+import { GeolocationService } from 'src/app/services/geolocation.service';
 
 //https://asymmetrik.com/ngx-leaflet-tutorial-angular-cli/
 
@@ -9,11 +11,13 @@ import { GeoLocation } from 'src/app/data/models';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements OnInit, OnDestroy {
 
   @Input() bins: Array<any> = [];
   @Input() getlocation: boolean = false;
   @Output() latlong: EventEmitter<GeoLocation> = new EventEmitter<GeoLocation>();
+  currentloc: GeoLocation = new GeoLocation(0, 0);
+  geosub: Subscription;
   clickpoint = circle([0, 0], { radius: 10 })
   options = {
     layers: [
@@ -25,24 +29,19 @@ export class MapComponent implements OnInit, OnChanges {
     center: latLng([16.566642, 81.52180])
   };
 
-  constructor() { }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['bins']) {
-    //   let change = changes['bins'];
-    //   console.log(change.currentValue, this.options.layers)
-    //   if (!!change.currentValue && change.currentValue.length > 0) {
-    //     if (this.options.layers.length == 2) {
-    //       this.options.layers.push(change.currentValue[0])
-    //     } else {
-    //       this.options.layers.splice(2, 1, change.currentValue[0])
-    //     }
-    //   }
-    // }
+  constructor(private geoloc: GeolocationService) { }
+  ngOnDestroy(): void {
+    if (this.geosub) this.geosub.unsubscribe();
   }
 
   ngOnInit(): void {
+    this.geosub = this.geoloc.CurrentLocation.subscribe(l => {
+      this.currentloc = l;
+      this.clickpoint.setLatLng({lat: l.latitude, lng:l.longitude});
+      this.latlong.emit(l);
+    })
   }
+
 
   handleclick(e) {
     //console.log(e)
