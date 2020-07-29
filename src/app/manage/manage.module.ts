@@ -6,6 +6,7 @@ import { MapsModule } from "src/app/maps/maps.module"
 import { AngularMaterialModule } from '../angular-material.module';
 import { FormsModule } from '@angular/forms';
 import { BinComponent } from './components/bin/bin.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // this module is for user to manage the bins
 
@@ -16,7 +17,8 @@ import { BinComponent } from './components/bin/bin.component';
     ManageRoutingModule,
     MapsModule,
     AngularMaterialModule,
-    FormsModule
+    FormsModule,
+    FlexLayoutModule,
   ]
 })
 export class ManageModule { }

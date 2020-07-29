@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
   nbintype: string = 'domestic';
   nbincode: string = '';
   bintypes = ['domestic', 'public', 'industrial']
-  selectedloc: GeoLocation = new GeoLocation(0, 0)
+  selectedloc: GeoLocation = new GeoLocation(0,0)
   getlocation: boolean = false;
   details: any;
   selectedbin: Bin;
@@ -41,6 +41,12 @@ export class HomeComponent implements OnInit {
     if (this.binsub) this.binsub.unsubscribe();
     if (this.usersub) this.usersub.unsubscribe();
 
+  }
+
+  updateloc(e: GeoLocation) {
+    setTimeout(() => {
+      this.selectedloc = e;
+    }, 10);
   }
 
   ngOnInit(): void {

@@ -4,6 +4,7 @@ import { EngageRoutingModule } from './engage-routing.module';
 import { BinUseComponent } from './components/bin-use/bin-use.component';
 import { AngularMaterialModule } from '../angular-material.module';
 import { BinsNearMeComponent } from './components/bins-near-me/bins-near-me.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // this module is for user's dashboard, comparitive dashboards and monthly challenges
 
@@ -12,6 +13,7 @@ import { BinsNearMeComponent } from './components/bins-near-me/bins-near-me.comp
   imports: [
     CommonModule,
     EngageRoutingModule,
+    FlexLayoutModule,
     AngularMaterialModule
   ]
 })

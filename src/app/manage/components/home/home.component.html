@@ -62,7 +62,7 @@
         </mat-expansion-panel>
     </mat-sidenav>
     <mat-sidenav-content>
-        <app-map [bins]="mapbins" [getlocation]="getlocation" (latlong)="selectedloc = $event"></app-map>
+        <app-map [bins]="mapbins" [getlocation]="getlocation" (latlong)="updateloc($event)"></app-map>
         <button *ngIf="!sidenav.isOpen" mat-mini-fab mat-icon-button (click)="sidenav.toggle()" class="openbtn">
             <mat-icon>keyboard_backspace</mat-icon>
         </button>

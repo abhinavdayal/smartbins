@@ -35,11 +35,14 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.geosub = this.geoloc.CurrentLocation.subscribe(l => {
-      this.currentloc = l;
-      this.clickpoint.setLatLng({lat: l.latitude, lng:l.longitude});
-      this.latlong.emit(l);
-    })
+    setTimeout(() => {
+      this.geosub = this.geoloc.CurrentLocation.subscribe(l => {
+        this.currentloc = l;
+        this.clickpoint.setLatLng({lat: l.latitude, lng:l.longitude});
+        this.latlong.emit(l);
+      })
+    }, 10);
+    
   }
 
 
