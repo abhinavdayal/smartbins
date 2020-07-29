@@ -38,38 +38,41 @@ export class BinUseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.usersub = this.authService.smartbinUser.subscribe(u => {
-      // same user
-      if (!!u && !!this.user && this.user.id == u.id ) return;
-
-      this.user = u;
-
-      if(!u) return;
-
-      this.histogramsub = this.crud.fetchHistogram().subscribe(r => {
-        this.histogram = !!r && r.length > 0 ? r[0] : null;
+    setTimeout(() => {
+      this.usersub = this.authService.smartbinUser.subscribe(u => {
+        // same user
+        if (!!u && !!this.user && this.user.id == u.id ) return;
+  
+        this.user = u;
+  
+        if(!u) return;
+  
+        this.histogramsub = this.crud.fetchHistogram().subscribe(r => {
+          this.histogram = !!r && r.length > 0 ? r[0] : null;
+        })
+  
+        this.monthlyprofilessub = this.crud.fetchCurrentYearMonthlyProfiles(this.user.id).subscribe(r => {
+  
+          this.monthlyprofiles = r;
+        })
+  
+        this.binusesub = this.crud.FetchCurrentMonthBinUse(u.id).subscribe(a => {
+          this.currentMonthBinUsage = a;
+          this.calcStats();
+          console.log(a)
+        })
+  
+        this.route.params.pipe(take(1)).subscribe(params => {
+          if (!!params['encryptedmsg']) {
+            // first check if this binusage already exist
+            //TODO, see if this timestamp and binid already exist (avoid duplicates)
+            let scandata = new ScanData(params['encryptedmsg'])
+            this.VerifyAndUpdate(scandata)
+          }
+        })
       })
-
-      this.monthlyprofilessub = this.crud.fetchCurrentYearMonthlyProfiles(this.user.id).subscribe(r => {
-
-        this.monthlyprofiles = r;
-      })
-
-      this.binusesub = this.crud.FetchCurrentMonthBinUse(u.id).subscribe(a => {
-        this.currentMonthBinUsage = a;
-        this.calcStats();
-        console.log(a)
-      })
-
-      this.route.params.pipe(take(1)).subscribe(params => {
-        if (!!params['encryptedmsg']) {
-          // first check if this binusage already exist
-          //TODO, see if this timestamp and binid already exist (avoid duplicates)
-          let scandata = new ScanData(params['encryptedmsg'])
-          this.VerifyAndUpdate(scandata)
-        }
-      })
-    })
+    }, 10);
+   
 
   }
 

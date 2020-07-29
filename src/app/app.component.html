@@ -19,7 +19,7 @@
         <mat-icon class="iconmargin">login</mat-icon>Sign in
       </a>
       <a mat-list-item *ngIf="!!user && user.isAnonymous" (click)="openProfileDialog()">
-        <mat-icon>account_circle</mat-icon>
+        <mat-icon class="iconmargin">account_circle</mat-icon>
         <span>Link Account</span>
       </a>
       <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
@@ -27,7 +27,7 @@
           <span>Switch User</span>
         </button> -->
       <a mat-list-item (click)="logout()">
-        <mat-icon>account_circle</mat-icon>
+        <mat-icon class="iconmargin">account_circle</mat-icon>
         <span>Logout</span>
       </a>
     </mat-nav-list>
@@ -35,62 +35,62 @@
   <mat-sidenav-content>
 
     <mat-toolbar color="primary">
-      <mat-toolbar-row>
-        <div fxShow fxHide.gt-sm>
-          <button mat-icon-button (click)="sidenav.toggle()">
-            <mat-icon>menu</mat-icon>
-          </button>
-        </div>
-        <div fxShow fxHide.lt-md>
-          <a class="lead" mat-button [routerLink]="['/']">
-            <mat-icon class="iconmargin">delete_sweep</mat-icon>
-            <span>Smartbins</span>
-          </a>
-
-          <a *ngIf="!!user" mat-button [routerLink]="['/engage']">
-            <mat-icon class="iconmargin">star</mat-icon>
-            <span>Engage</span>
-          </a>
-          <a *ngIf="!!user && !user.isAnonymous" mat-button [routerLink]="['/manage']">
-            <mat-icon class="iconmargin">map</mat-icon>
-            <span>Manage</span>
-          </a>
-        </div>
-        <button mat-raised-button>
-          <mat-icon class="iconmargin">qr_code_scanner</mat-icon> Scan
+      <div fxHide.gt-sm>
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
         </button>
-        <span class="spacer"></span>
-        <div fxShow fxHide.lt-md>
-          <button *ngIf="!user" mat-button (click)="openLoginDialog()">
-            <mat-icon class="iconmargin">login</mat-icon>Sign in
+      </div>
+      <div fxHide.lt-sm>
+        <a class="lead" mat-button [routerLink]="['/']">
+          <mat-icon class="logo">delete_sweep</mat-icon>
+          <span>Smartbins</span>
+        </a>
+
+        <a *ngIf="!!user" mat-button [routerLink]="['/engage']">
+          <mat-icon class="iconmargin">star</mat-icon>
+          <span>Engage</span>
+        </a>
+        <a *ngIf="!!user && !user.isAnonymous" mat-button [routerLink]="['/manage']">
+          <mat-icon class="iconmargin">map</mat-icon>
+          <span>Manage</span>
+        </a>
+      </div>
+      <button mat-raised-button>
+        <mat-icon class="iconmargin">qr_code_scanner</mat-icon> Scan
+      </button>
+      <span class="spacer"></span>
+      <div fxHide.lt-sm>
+        <button *ngIf="!user" mat-button (click)="openLoginDialog()">
+          <mat-icon class="iconmargin">login</mat-icon>Sign in
+        </button>
+        <button *ngIf="!!user" mat-button [matMenuTriggerFor]="menu">
+          <span *ngIf="!user.isAnonymous">{{user.displayName}}</span>
+          <span *ngIf="user.isAnonymous">Anonymous</span>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button *ngIf="!!user && user.isAnonymous" mat-menu-item (click)="openProfileDialog()">
+            <mat-icon class="iconmargin">account_circle</mat-icon>
+            <span>Link Account</span>
           </button>
-          <button *ngIf="!!user" mat-button [matMenuTriggerFor]="menu">
-            <span *ngIf="!user.isAnonymous">{{user.displayName}}</span>
-            <span *ngIf="user.isAnonymous">Anonymous</span>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button *ngIf="!!user && user.isAnonymous" mat-menu-item (click)="openProfileDialog()">
-              <mat-icon>account_circle</mat-icon>
-              <span>Link Account</span>
-            </button>
-            <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
+          <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
             <mat-icon>account_circle</mat-icon>
             <span>Switch User</span>
           </button> -->
-            <button mat-menu-item (click)="logout()">
-              <mat-icon>account_circle</mat-icon>
-              <span>Logout</span>
-            </button>
-          </mat-menu>
-        </div>
-        
-        <img *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
-      </mat-toolbar-row>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>account_circle</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <img *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
     </mat-toolbar>
-    <div class="warning" *ngIf="!!user && user.isAnonymous">
-      <p>If you close this session without signing in you will lose all Anonymous credits!</p>
+    <div class="fullheight">
+      <div class="warning" *ngIf="!!user && user.isAnonymous">
+        <p>If you close this session without signing in you will lose all Anonymous credits!</p>
+      </div>
+      <router-outlet></router-outlet>
+      <ng-snotify></ng-snotify>
     </div>
-    <router-outlet></router-outlet>
-    <ng-snotify></ng-snotify>
   </mat-sidenav-content>
 </mat-sidenav-container>

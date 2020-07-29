@@ -1,6 +1,6 @@
 <mat-list *ngIf="user" role="list">
     <!-- TODO Make it a timeline kind of chart to show last 30 day usage-->
-    <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage">{{u.time}}, {{u.bincode}}, {{u.usedby}}, {{u.currentweight_gm}}, {{u.currentlevel_percent}}</mat-list-item>
+    <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage">{{u.time}}, {{u.binid}}, {{u.usedby}}, {{u.currentweight_gm}}, {{u.currentlevel_percent}}</mat-list-item>
 </mat-list>
 
 <!--

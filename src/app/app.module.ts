@@ -16,6 +16,7 @@ import { LoginDialogComponent } from "./dialogs/login-dialog/login-dialog.compon
 import { ProfileDialogComponent } from "./dialogs/profile-dialog/profile-dialog.component"
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig), // Main Angular fire module 

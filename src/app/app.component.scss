@@ -1,3 +1,7 @@
+.content {
+    flex: 1 0 auto;
+}
+
 .userimage {
     height: 40px;
     border-radius: 20px;
@@ -9,7 +13,23 @@
 }
 
 .lead {
-    font-size: 20px;
+    background-color: #3f51b5;
+    color: white;
+    mat-icon {
+        color: white;
+    }
+    mat-icon.logo {
+        font-size: 50px;
+        height: 50px;
+        width: 50px;
+        margin-right: 20px;
+    }
+    span {
+        font-weight: 200;
+        font-size: 30px;
+        flex: 1 1 auto;
+        text-align: left;
+    }
 }
 
 .warning {
@@ -18,65 +38,69 @@
     background-color: lightyellow;
 }
 
-
 .spacer {
     flex: 1 1 auto;
-  }
-  
-  .userimage {
+}
+
+.userimage {
     height: 40px;
     border-radius: 20px;
-  }
-  
-  .leftmargin {
+}
+
+.leftmargin {
     margin-left: 20px;
-  }
-  .leftmargin_sm {
+}
+.leftmargin_sm {
     margin-left: 5px;
-  }
-  
-  .topheading {
+}
+
+.topheading {
     padding: 20px;
-    background-color: #3F51B5;
+    background-color: #3f51b5;
     color: white;
     mat-icon {
-      color: white;
+        color: white;
     }
     mat-icon.logo {
-      font-size: 50px;
-      height: 50px;
-      width: 50px;
-      margin-right: 20px;
+        font-size: 50px;
+        height: 50px;
+        width: 50px;
+        margin-right: 20px;
     }
     span {
-      font-weight: 200;
-      font-size: 30px;
-      flex: 1 1 auto;
-      text-align: left;
+        font-weight: 200;
+        font-size: 30px;
+        flex: 1 1 auto;
+        text-align: left;
     }
-  }
-  
-  .title mat-icon {
+}
+
+.title mat-icon {
     transform: scale(1.4);
-  }
-  
-  .navlist {
+}
+
+.navlist {
     min-width: 300px;
+    height: 100%;
     padding-top: 0;
     .mat-list-item {
-      font-size: 20px;
-      mat-icon {
-        font-size: 30px;
-        width: 30px;
-        height: 30px;
-        color: #3F51B5;
-      }
-      &:nth-child(odd) {
-        background-color: #eee;
-      }
+        font-size: 20px;
+        mat-icon {
+            font-size: 30px;
+            width: 30px;
+            height: 30px;
+            color: #3f51b5;
+        }
+        &:nth-child(odd) {
+            background-color: #eee;
+        }
     }
-  }
-  
-  .fullwidth {
+}
+
+.fullwidth {
     width: 100%;
-  }
+}
+
+.fullheight {
+    min-height: calc(100vh);
+}
