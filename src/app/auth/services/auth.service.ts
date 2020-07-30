@@ -3,9 +3,13 @@ import { Router } from "@angular/router";
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { User } from 'firebase';
-import { Observable, Subject} from 'rxjs';
+import { Observable, Subject, BehaviorSubject} from 'rxjs';
 import { SnotifyService } from 'ng-snotify';
-import { SmartbinUser } from 'src/app/data/models';
+import { SmartbinUser, COLLECTIONS } from 'src/app/data/models';
+import { AngularFirestore, AngularFirestoreDocument, QuerySnapshot, DocumentData } from '@angular/fire/firestore';
+import { _isNumberValue } from '@angular/cdk/coercion';
+import { take } from 'rxjs/operators';
+import { CrudService } from 'src/app/data/crud.service';
 
 // https://www.techiediaries.com/angular-firebase/angular-9-firebase-authentication-email-google-and-password/
 
@@ -13,8 +17,49 @@ import { SmartbinUser } from 'src/app/data/models';
   providedIn: 'root'
 })
 export class AuthService {
+  
 
-  private _smartbinUser: Subject<SmartbinUser> = new Subject<SmartbinUser>();
+  private _user: AngularFirestoreDocument;
+  private _smartbinUser: BehaviorSubject<SmartbinUser> = new BehaviorSubject<SmartbinUser>(null);
+  private _loginNeeded: Subject<boolean> = new Subject<boolean>();
+
+  LoginRequested = this._loginNeeded.asObservable()
+
+  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore, public router: Router, 
+    private notify: SnotifyService, private crud: CrudService) {
+    // this.afAuth.authState.subscribe(user => {
+    //   //console.log("AUTH SERVICE")
+    //   //console.log(user);
+    //   if(!user) localStorage.removeItem("STATUS");
+    // })
+  }
+
+  requestLogin(){
+    this._loginNeeded
+    .next(true);
+  }
+
+  // get the smart bin user associated with current user
+  getSmartbinUser(user: User) {
+    this._user = this.afs.collection(COLLECTIONS.USERS).doc(user.uid);
+
+    this._user.get().pipe(take(1)).subscribe(r=>{
+      if(!r.exists) {
+        this._user.set(this.crud.deepCopy(new SmartbinUser(user))).then(()=>{
+          this._user.get().pipe(take(1)).subscribe(d=>{
+            this.setSmartbinUser(d.data() as SmartbinUser)
+          })
+        })
+      } else {
+        this.setSmartbinUser(r.data() as SmartbinUser)
+      }
+    })
+  }
+
+  updateSmartbinUser(data: any) {
+    if(this._user)
+      this._user.update(this.crud.deepCopy(data));
+  }
 
   get mobile() {
     var check = false;
@@ -27,7 +72,7 @@ export class AuthService {
   }
 
   setSmartbinUser(u: SmartbinUser) {
-    if(!!u) localStorage.setItem("STATUS", u.id)
+    if(!!u) localStorage.setItem("STATUS", u.uid)
     else localStorage.removeItem("STATUS");
     this._smartbinUser.next(u)
   }
@@ -36,13 +81,7 @@ export class AuthService {
     return this.afAuth.user;
   }
 
-  constructor(public afAuth: AngularFireAuth, public router: Router, private notify: SnotifyService) {
-    this.afAuth.authState.subscribe(user => {
-      //console.log("AUTH SERVICE")
-      //console.log(user);
-      if(!user) localStorage.removeItem("STATUS");
-    })
-  }
+
 
   get currentUserId(): string {
     return localStorage.getItem("STATUS");

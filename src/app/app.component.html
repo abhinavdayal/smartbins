@@ -6,6 +6,7 @@
       </a>
       <mat-icon>close</mat-icon>
     </div>
+    <p *ngIf="!!user">{{!!user.name?user.name : 'Anonymous'}}</p>
     <mat-nav-list fxLayout="column" class="navlist">
       <a mat-list-item *ngIf="!!user" [routerLink]="['/engage']">
         <mat-icon class="iconmargin">star</mat-icon>
@@ -15,7 +16,7 @@
         <mat-icon class="iconmargin">map</mat-icon>
         <span>Manage</span>
       </a>
-      <a mat-list-item *ngIf="!user" (click)="openLoginDialog()">
+      <a mat-list-item *ngIf="!user" (click)="logingoogle()">
         <mat-icon class="iconmargin">login</mat-icon>Sign in
       </a>
       <a mat-list-item *ngIf="!!user && user.isAnonymous" (click)="openProfileDialog()">
@@ -60,11 +61,11 @@
       </button>
       <span class="spacer"></span>
       <div fxHide.lt-sm>
-        <button *ngIf="!user" mat-button (click)="openLoginDialog()">
+        <button *ngIf="!user" mat-button (click)="logingoogle()">
           <mat-icon class="iconmargin">login</mat-icon>Sign in
         </button>
         <button *ngIf="!!user" mat-button [matMenuTriggerFor]="menu">
-          <span *ngIf="!user.isAnonymous">{{user.displayName}}</span>
+          <span *ngIf="!user.isAnonymous">{{user.name}}</span>
           <span *ngIf="user.isAnonymous">Anonymous</span>
         </button>
         <mat-menu #menu="matMenu">

@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import { latLng, tileLayer, marker, icon, circle } from 'leaflet';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
+import { latLng, tileLayer, circle } from 'leaflet';
 import { GeoLocation } from 'src/app/data/models';
 import { Subscription } from 'rxjs';
 import { GeolocationService } from 'src/app/services/geolocation.service';
@@ -9,7 +9,7 @@ import { GeolocationService } from 'src/app/services/geolocation.service';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
 
@@ -30,6 +30,7 @@ export class MapComponent implements OnInit, OnDestroy {
   };
 
   constructor(private geoloc: GeolocationService) { }
+
   ngOnDestroy(): void {
     if (this.geosub) this.geosub.unsubscribe();
   }

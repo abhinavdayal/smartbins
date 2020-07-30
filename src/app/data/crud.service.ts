@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 //import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';  // Firebase modules for Database, Data list and Single object
 import { SmartbinUser, Binusage, Bin, MonthlyHistogram, MonthlyProfile, COLLECTIONS } from './models'
-import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentChangeAction, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { SnotifyService } from 'ng-snotify';
 
@@ -13,7 +13,7 @@ export class CrudService {
   constructor(private db: AngularFirestore, private notify: SnotifyService) { }
 
   create(record: any, collection: string) {
-    return this.db.collection(collection).add(this.deepCopyFunction(record)).then((d) => {
+    return this.db.collection(collection).add(this.deepCopy(record)).then((d) => {
       //console.log(d)
     }).catch((e) => {
       //console.log(e)
@@ -21,11 +21,20 @@ export class CrudService {
     })
   }
 
+  set(id: string, record: any, collection: string) {
+    this.db.collection(collection).doc(id).set(this.deepCopy(record));
+  }
+
+  get(id: string, collection: string) {
+    return this.db.collection(collection).doc(id);
+  }
+
+
 
   update(record: any, collection: string) {
     //this.db.doc(`${collection}/${record.id}`).update(this.deepCopyFunction(record));
     //console.log(record)
-    return this.db.collection(collection).doc(record.id).update(this.deepCopyFunction(record)).catch(e => {
+    return this.db.collection(collection).doc(record.id).update(this.deepCopy(record)).catch(e => {
       this.notify.error(e.message)
     })
   }
@@ -38,18 +47,10 @@ export class CrudService {
     return this.db.doc(`${collection}/${id}`).get();
   }
 
-  fetchHistogram() {
+  fetchCurrentHist(): AngularFirestoreDocument<MonthlyHistogram> {
     let d = new Date();
-    return this.db.collection<MonthlyHistogram>(COLLECTIONS.MONTHLYHIST, ref => {
-      return ref.where("month", "==", d.getMonth()).where("year", "==", d.getFullYear())
-    }).valueChanges()
-  }
-
-  fetchCurrentHist() {
-    let d = new Date();
-    return this.db.collection<MonthlyHistogram>(COLLECTIONS.MONTHLYHIST, ref => {
-      return ref.where("month", "==", d.getMonth()).where("year", "==", d.getFullYear())
-    }).snapshotChanges()
+    let id = `${d.getMonth()}-${d.getFullYear()}`
+    return this.db.collection<MonthlyHistogram>(COLLECTIONS.MONTHLYHIST).doc(id)
   }
 
   fetchCurrentYearMonthlyProfiles(userid: string) {
@@ -61,13 +62,12 @@ export class CrudService {
 
   fetchMonthlyProfile(userid: string) {
     let d = new Date();
-    return this.db.collection<MonthlyProfile>(COLLECTIONS.MONTHLYPROFILE, ref => {
-      return ref.where("month", "==", d.getMonth()).where("year", "==", d.getFullYear()).where("userid", "==", userid)
-    }).snapshotChanges()
+    let mid = `${userid}-${d.getMonth()}-${d.getFullYear()}`
+    return this.db.collection<MonthlyProfile>(COLLECTIONS.MONTHLYPROFILE).doc(mid)
   }
 
 
-  deepCopyFunction(inObject: any) {
+  deepCopy(inObject: any) {
     let outObject, value, key
 
     if (typeof inObject !== "object" || inObject === null) {
@@ -81,7 +81,7 @@ export class CrudService {
       value = inObject[key]
 
       // Recursively (deep) copy for nested objects, including arrays
-      outObject[key] = this.deepCopyFunction(value)
+      outObject[key] = this.deepCopy(value)
     }
 
     return outObject
@@ -104,21 +104,9 @@ export class CrudService {
     }).snapshotChanges()
   }
 
-  findBin(code: string) {
-    return this.db.collection<Bin>(COLLECTIONS.BINS, ref => {
-      return ref.where("code", "==", code)
-    }).snapshotChanges()
-  }
-
-  FetchDuplciateBinUse(timestamp: number, binid: string): Observable<Binusage[]> {
+  FetchRecentBinUse(bincode) {
     return this.db.collection<Binusage>(COLLECTIONS.BINUSAGE, ref => {
-      return ref.where("time", "==", timestamp).where("binid", "==", binid)
-    }).valueChanges()
-  }
-
-  FetchRecentBinUse(binid) {
-    return this.db.collection<Binusage>(COLLECTIONS.BINUSAGE, ref => {
-      return ref.where("binid", "==", binid).orderBy("time", "desc").limit(1)
+      return ref.where("bincode", "==", bincode).orderBy("time", "desc").limit(1)
     }).valueChanges()
   }
 
@@ -127,5 +115,6 @@ export class CrudService {
       return ref.where("uid", "==", uid)
     }).snapshotChanges()
   }
+
 
 }
