@@ -30,15 +30,14 @@ export const notifyUser = functions.firestore.document('messages/{messageId}').o
     return userRef.get()
         .then(snapshot => snapshot.data())
         .then(user => {
-            if (!!user) {
-                const tokens = user.fcmTokens ? Object.keys(user.fcmTokens) : []
+            const tokens = !!user && user.fcmTokens ? Object.keys(user.fcmTokens) : []
 
-                if (!tokens.length) {
-                    throw new Error('User does not have any tokens!')
-                }
-
-                return admin.messaging().sendToDevice(tokens, payload)
+            if (!tokens.length) {
+                throw new Error('User does not have any tokens!')
             }
+
+            return admin.messaging().sendToDevice(tokens, payload)
+
         }).catch(err => {
             console.log(err)
             //todo se what tikes failed and remove from fcmtokens

@@ -14,6 +14,7 @@ import { MessagingService } from './services/messaging.service'
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { ProfileDialogComponent } from './dialogs/profile-dialog/profile-dialog.component';
+import { ScannerComponent } from './dialogs/scanner/scanner.component';
 
 @Component({
   selector: 'app-root',
@@ -147,6 +148,12 @@ export class AppComponent implements OnInit {
         this.user = u;
       })
 
+  }
+
+  openScannerDialog(): void {
+    const dialogRef = this.dialog.open(ScannerComponent);
+    // dialogRef.afterClosed().subscribe(result => {
+    // });
   }
 
   openLoginDialog(): void {

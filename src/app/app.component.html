@@ -73,9 +73,9 @@
           <span>Manage</span>
         </a>
       </div>
-      <a mat-raised-button routerLink="/scanner" routerLinkActive="active">
+      <button mat-raised-button (click)="openScannerDialog()">
         <mat-icon class="iconmargin">qr_code_scanner</mat-icon> Scan
-      </a>
+      </button>
       <span class="spacer"></span>
       <div fxHide.lt-sm>
         <button *ngIf="!user" mat-button (click)="logingoogle()">

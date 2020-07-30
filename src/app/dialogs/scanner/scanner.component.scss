@@ -1,0 +1,33 @@
+.scanner-view {
+  text-align: center;
+  font-weight: 100;
+
+  h2 {
+    text-transform: uppercase;
+    margin: 0;
+  }
+  button {
+    width: 200px;
+  }
+
+  .scanner {
+    position: relative;
+    width: 300px;
+    height: 250px;
+
+    .frame {
+      position: absolute;
+      font-size: 200px;
+      color: white;
+      top: 96px;
+    }
+
+    .left {
+      left: 10px;
+    }
+
+    .right {
+      right: 10px;
+    }
+  }
+}

@@ -18,7 +18,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from './shared/shared.module';
-import { ScannerComponent } from './scanner/scanner.component';
+import { ScannerComponent } from './dialogs/scanner/scanner.component';
 import { NgQrScannerModule } from 'angular2-qrscanner';
 
 @NgModule({
@@ -46,7 +46,7 @@ import { NgQrScannerModule } from 'angular2-qrscanner';
     SharedModule,
     NgQrScannerModule,
   ],
-  entryComponents: [LoginDialogComponent, ProfileDialogComponent],
+  entryComponents: [LoginDialogComponent, ProfileDialogComponent, ScannerComponent],
   providers: [
     { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     {
