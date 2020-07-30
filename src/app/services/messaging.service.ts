@@ -26,7 +26,7 @@ export class MessagingService {
     })
       .then(token => this.saveToken(user, token))
       .catch((err) => {
-        console.log(err, 'Unable to get prmission');
+        console.log(err, 'Unable to get permission');
         this.notify.error("Unable to get notification permission");
       });
   }
@@ -43,6 +43,7 @@ export class MessagingService {
     });
   }
 
+  // used to show message when the app is open
   receiveMessages() {
     this.messaging.onMessage(payload => {
       console.log('Message received. ', payload);

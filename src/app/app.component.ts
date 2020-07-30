@@ -111,6 +111,13 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // todo, show icon on left
+    this.msg.currentMessage.subscribe((m:any)=>{
+      this.snotifyService.html(`
+      <div class="snotifyToast__title"><b>${m.notification.title}</b></div>
+      <div class="snotifyToast__body">${m.notification.body}</div>
+      `, {timeout: 10000})
+    })
 
     this.authService.LoginRequested.subscribe(r=>{
       if(r) this.openLoginDialog();
@@ -127,9 +134,9 @@ export class AppComponent implements OnInit {
 
     this.authService.User.pipe(filter(user => !!user)).pipe(take(1))
       .subscribe(user => {
-        //this.msg.getPermission(user)
-        //this.msg.monitorRefresh(user);
-        //this.msg.receiveMessages();
+        this.msg.getPermission(user)
+        this.msg.monitorRefresh(user);
+        this.msg.receiveMessages();
         this.authService.getSmartbinUser(user)
       })
 
