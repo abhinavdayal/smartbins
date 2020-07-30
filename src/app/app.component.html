@@ -19,9 +19,10 @@
       <a mat-list-item *ngIf="!user" (click)="logingoogle()">
         <mat-icon class="iconmargin">login</mat-icon>Sign in
       </a>
-      <a mat-list-item *ngIf="!!user && user.isAnonymous" (click)="openProfileDialog()">
+      <a mat-list-item *ngIf="!!user" (click)="openProfileDialog()">
         <mat-icon class="iconmargin">account_circle</mat-icon>
-        <span>Link Account</span>
+        <span *ngIf="user.isAnonymous">Link Account</span>
+        <span *ngIf="!user.isAnonymous">Edit Name</span>
       </a>
       <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
           <mat-icon>account_circle</mat-icon>
@@ -69,10 +70,13 @@
           <span *ngIf="user.isAnonymous">Anonymous</span>
         </button>
         <mat-menu #menu="matMenu">
-          <button *ngIf="!!user && user.isAnonymous" mat-menu-item (click)="openProfileDialog()">
+
+          <button mat-menu-item *ngIf="!!user" (click)="openProfileDialog()">
             <mat-icon class="iconmargin">account_circle</mat-icon>
-            <span>Link Account</span>
+            <span *ngIf="user.isAnonymous">Link Account</span>
+            <span *ngIf="!user.isAnonymous">Edit Name</span>
           </button>
+
           <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
             <mat-icon>account_circle</mat-icon>
             <span>Switch User</span>
@@ -84,7 +88,7 @@
         </mat-menu>
       </div>
 
-      <img *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
+      <img [matMenuTriggerFor]="menu" *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
     </mat-toolbar>
     <div class="fullheight">
       <div class="warning" *ngIf="!!user && user.isAnonymous">

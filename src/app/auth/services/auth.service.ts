@@ -45,12 +45,14 @@ export class AuthService {
 
     this._user.get().pipe(take(1)).subscribe(r=>{
       if(!r.exists) {
+        console.log("creating ", user)
         this._user.set(this.crud.deepCopy(new SmartbinUser(user))).then(()=>{
           this._user.get().pipe(take(1)).subscribe(d=>{
             this.setSmartbinUser(d.data() as SmartbinUser)
           })
         })
       } else {
+        console.log("returning ", r.data())
         this.setSmartbinUser(r.data() as SmartbinUser)
       }
     })
@@ -144,6 +146,7 @@ export class AuthService {
     });
     this.setSmartbinUser(null);
     this.router.navigate(['/']);
+    window.location.reload();
   }
 
   get isLoggedIn(): boolean {

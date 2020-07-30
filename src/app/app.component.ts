@@ -112,15 +112,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // todo, show icon on left
-    this.msg.currentMessage.subscribe((m:any)=>{
+    this.msg.currentMessage.subscribe((m: any) => {
       this.snotifyService.html(`
       <div class="snotifyToast__title"><b>${m.notification.title}</b></div>
       <div class="snotifyToast__body">${m.notification.body}</div>
-      `, {timeout: 10000})
+      `, { timeout: 10000 })
     })
 
-    this.authService.LoginRequested.subscribe(r=>{
-      if(r) this.openLoginDialog();
+    this.authService.LoginRequested.subscribe(r => {
+      if (r) this.openLoginDialog();
     })
 
     this.geoloc.CurrentLocation.subscribe(l => {
@@ -172,26 +172,40 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!!result) {
-        this.authService.linkWithGoogle(this.firebaseuser).then(u => {
-          //console.log(u);
-          this.user.name = result;
-          this.user.email = u.user.email;
-          this.authService.updateSmartbinUser({
-            name: result,
-            email: u.user.email
+      if (this.user.isAnonymous) {
+        if (!!result) {
+          this.authService.linkWithGoogle(this.firebaseuser).then(u => {
+            //console.log(u);
+            this.RenameUser(result, u);
+          }).catch((e) => {
+            //console.log(e);
+            if (e.code == 'auth/credential-already-in-use') {
+              // TODO. move all of user's data to this one and delete this user
+              // way is to take anon user uid and fetch all usage data. and move to newly created user.
+              this.snotifyService.warning("You already have an account. Please signin using that account.", { timeout: 10000 });
+              //this.authService.SigninWithCredentials(e.credential);
+            }
           })
-        }).catch((e) => {
-          //console.log(e);
-          if (e.code == 'auth/credential-already-in-use') {
-            // TODO. move all of user's data to this one and delete this user
-            // way is to take anon user uid and fetch all usage data. and move to newly created user.
-            this.snotifyService.warning("You already have an account. Please signin using that account.", { timeout: 10000 });
-            //this.authService.SigninWithCredentials(e.credential);
-          }
-        })
+        }
+      } else {
+        this.RenameUser(result);
       }
     });
+  }
+
+  private RenameUser(name: any, u?: any) {
+    this.user.name = name;
+    if (!!u) {
+      this.user.email = u.user.email;
+      this.authService.updateSmartbinUser({
+        name: name,
+        email: u.user.email
+      });
+    } else {
+      this.authService.updateSmartbinUser({
+        name: name
+      });
+    }
   }
 
   changeuser() {
