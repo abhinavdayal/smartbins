@@ -153,6 +153,8 @@ export class AppComponent implements OnInit {
         this.authService.anonymousLogin();
       } else if (result == "google") {
         this.logingoogle();
+      } else {
+        this.router.navigate(['/']);
       }
     });
   }

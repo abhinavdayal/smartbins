@@ -8,7 +8,6 @@ const routes: Routes = [
     path: 'engage',
     loadChildren: () => import('./engage/engage.module').then(m => m.EngageModule),
     canActivate: [AnonauthGuard],
-    canLoad: [AnonauthGuard]
   },
   {
     path: 'manage',

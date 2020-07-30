@@ -16,7 +16,7 @@ export class AnonauthGuard implements CanActivate, CanLoad {
       return true;
     }
     this.authService.requestLogin();
-    return false;
+    return true;
   }
   canLoad(route: Route): boolean {
     if (this.authService.isLoggedIn)
