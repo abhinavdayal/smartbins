@@ -160,5 +160,8 @@
       }
     }
   },
-  "defaultProject": "smartbins"
+  "defaultProject": "smartbins",
+  "cli": {
+    "analytics": false
+  }
 }
