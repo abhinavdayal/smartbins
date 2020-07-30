@@ -3,6 +3,8 @@
     <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage">{{u.time}}, {{u.binid}}, {{u.usedby}}, {{u.currentweight_gm}}, {{u.currentlevel_percent}}</mat-list-item>
 </mat-list>
 
+<app-challenge></app-challenge>
+
 <!--
     TODO, display the total useage from userprofile
     {{user.total_use_count}} {{user.total_weight_thrown}}

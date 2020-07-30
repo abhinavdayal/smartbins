@@ -134,9 +134,9 @@ export class AppComponent implements OnInit {
 
     this.authService.User.pipe(filter(user => !!user)).pipe(take(1))
       .subscribe(user => {
-        this.msg.getPermission(user)
-        this.msg.monitorRefresh(user);
-        this.msg.receiveMessages();
+        //this.msg.getPermission(user)
+        //this.msg.monitorRefresh(user);
+        //this.msg.receiveMessages();
         this.authService.getSmartbinUser(user)
       })
 

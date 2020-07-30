@@ -1,0 +1,7 @@
+<div *ngIf="!!board" style="width:300px; height:300px;">
+    <div *ngFor="let row of board" fxLayout="row">
+        <div [ngClass]="{'cell': true, 'done':col>0 && col<=score, 'notdone':col>score}" *ngFor="let col of row">
+
+        </div>
+    </div>
+</div>

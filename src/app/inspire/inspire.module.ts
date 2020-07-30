@@ -4,7 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { InspireRoutingModule } from './inspire-routing.module';
 import { AngularMaterialModule } from '../angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import { SharedModule } from 'src/app/shared/shared.module'
 // This module is to add blogs, information etc. to motivate and educate user
 
 @NgModule({
@@ -13,7 +13,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     CommonModule,
     InspireRoutingModule,
     FlexLayoutModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    SharedModule
   ]
 })
 export class InspireModule { }

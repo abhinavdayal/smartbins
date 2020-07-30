@@ -17,6 +17,7 @@ import { ProfileDialogComponent } from "./dialogs/profile-dialog/profile-dialog.
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SharedModule } from './shared/shared.module'
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     AngularFireDatabaseModule,  // Firebase database module 
     AngularMaterialModule,
     SnotifyModule,
+    SharedModule
   ],
   entryComponents: [
     LoginDialogComponent, ProfileDialogComponent
