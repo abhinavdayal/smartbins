@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { AnonauthGuard } from './auth/guards/anonauth.guard';
-import { GarbageDetectorComponent } from './garbage-detector/garbage-detector.component';
-import { AdminGuard } from './auth/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -24,11 +21,6 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./inspire/inspire.module').then((m) => m.InspireModule),
-  },
-  {
-    path: 'garbagedetector',
-    component: GarbageDetectorComponent,
-    canActivate: [AdminGuard],
   },
 ];
 
