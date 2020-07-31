@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
     private authService: AuthService, private crud: CrudService, private geoloc: GeolocationService,
     public dialog: MatDialog, private msg: MessagingService,private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer
   ) {
-    iconRegistry.addSvgIcon(
+    this.iconRegistry.addSvgIcon(
       'twitter',
       this.sanitizer.bypassSecurityTrustResourceUrl('../assets/icons/twitter.svg'));
 
