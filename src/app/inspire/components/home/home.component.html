@@ -1,1 +1,133 @@
-<p>INSPIRE home works!</p>
+<mat-carousel
+  timings="250ms ease-in"
+  [autoplay]="true"
+  interval="5000"
+  color="accent"
+  maxWidth="auto"
+  proportion="40"
+  slides="5"
+  [loop]="true"
+  [hideArrows]="false"
+  [hideIndicators]="false"
+  [useKeyboard]="true"
+  [useMouseWheel]="false"
+  orientation="ltr"
+>
+  <mat-carousel-slide
+    #matCarouselSlide
+    *ngFor="let slide of slides; let i = index"
+    [image]="slide.image"
+    overlayColor="#00000040"
+    [hideOverlay]="false"
+  ></mat-carousel-slide>
+</mat-carousel>
+<div class="float-container" fxLayout.xs="column" fxLayout="row wrap" fxLayoutGap="8px ">
+<div class="float-child" >
+<mat-card class="example-card" [class.mat-elevation-z12]="true" >
+    <mat-card-header>
+        <mat-card-title>EVENTS</mat-card-title>
+    </mat-card-header>
+    <i class="material-icons " >event</i>
+    <mat-card-content>
+      <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
+        Events are shown here will be conducted by government or the events are conducted by different management 
+        across the nation regarding cleanliness of our surroundings. Participation increases acknowledgement for people around us about events. 
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>EXPLORE</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<div class="float-child-1" layout="row">
+  <mat-card class="example-card-1" [class.mat-elevation-z12]="true">
+    <mat-card-header>
+        <mat-card-title>MONTHLY CHALLENGES</mat-card-title>
+    </mat-card-header>
+    <i class="material-icons ">campaign</i>
+    <mat-card-content>
+      <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
+        Monthly challenges are conducted by the organization regarding redemption of monthly challenge 
+        into reward points that help to user to earn money or valued objects through it. There will be rankings based on 
+        monthly challenge held every month.
+       </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>EXPLORE</button>
+    </mat-card-actions>
+  </mat-card>
+  </div>
+  <div class="float-child-2" layout="row" [class.mat-elevation-z12]="true">
+    <mat-card class="example-card-2">
+        <mat-card-header>
+            <mat-card-title>VIDEOS</mat-card-title>
+        </mat-card-header>
+        <i class="material-icons " >play_circle_filled</i>
+      <mat-card-content>
+        <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
+          There will be different kind of videos all come under the cleanliness and swachh bharat activities conducted by government 
+          of india or different kinds of organizations for the purpose of cleanliness. Videos regarding events are also avaliable under this section. 
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>EXPLORE</button>
+      </mat-card-actions>
+    </mat-card>
+    </div>
+    </div>
+    
+  
+ 
+<!-- footer -->
+<footer  style="background-color: #2c292f">
+  <div class="container">
+      <div class="row ">
+          <div class="col-md-4 text-center text-md-left ">
+              
+              <div class="py-0">
+                  <h3 class="my-4 text-white">About<span class="mx-2 font-italic text-warning ">Smartbins</span></h3>
+
+                  <p class="footer-links font-weight-bold">
+                      <a class="text-white" href="#">Home</a>
+                      |
+                      <a class="text-white" href="#">Blog</a>
+                      |
+                      <a class="text-white" href="#">About</a>
+                      |
+                      <a class="text-white" href="#">Contact</a>
+                  </p>
+                  <p class="text-light py-4 mb-4">&copy;2020 Vishnu Institute Of Technology</p>
+              </div>
+          </div>
+          
+          <div class="col-md-4 text-white text-center text-md-left ">
+              <div class="py-2 my-4">
+                  <div>
+                      <p class="text-white"> <i class="fa fa-map-marker mx-2 "></i>
+                              Vishnu Institute of Technology,
+                              Vishnupur,Bhimavaram
+                            West Godavari, Andhra pradesh, India  - 534202</p>
+                  </div>
+
+                  <div> 
+                      <p><i class="fa fa-phone  mx-2 "></i> +91 22-27782183</p>
+                  </div>
+                  <div>
+                      <p><i class="fa fa-envelope  mx-2"></i><a href="#">smartbins@vishnu.edu.in</a></p>
+                  </div>  
+              </div>  
+          </div> 
+          
+          <div class="col-md-4 text-white my-4 text-center text-md-left ">
+              <span class=" font-weight-bold ">About</span>
+    <p class="text-warning my-2" >We started smartbins considering events like swachh bharat conducted by government of india</p>
+              <div class="py-2">
+                  <a href="#"><i class="fab fa-facebook fa-2x text-primary mx-3"></i></a>
+                  <a href="#"><i class="fab fa-google-plus fa-2x text-danger mx-3"></i></a>
+                  <a href="#"><i class="fab fa-twitter fa-2x text-info mx-3"></i></a>
+                  <a href="#"><i class="fab fa-youtube fa-2x text-danger mx-3"></i></a>
+              </div>
+          </div>
+      </div>  
+  </div>
+</footer>
