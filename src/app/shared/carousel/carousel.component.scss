@@ -1,6 +1,14 @@
 .tab {
     img {
-        width: 100%;
         height: 300px;
+        width:100%;
+        object-fit: cover;
+    }
+}
+
+.header-less-tabs.mat-tab-group{
+    flex: 1 1 0;
+    .mat-tab-header {
+        display: none;
     }
 }
