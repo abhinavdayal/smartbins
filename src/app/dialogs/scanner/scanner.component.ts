@@ -1,7 +1,13 @@
-import { Component, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ViewEncapsulation,
+  AfterViewInit,
+} from '@angular/core';
 import { QrScannerComponent } from 'angular2-qrscanner';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { SnotifyService } from 'ng-snotify';
 @Component({
   selector: 'app-scanner',
   templateUrl: './scanner.component.html',
@@ -11,7 +17,11 @@ import { Router } from '@angular/router';
 export class ScannerComponent implements AfterViewInit {
   @ViewChild(QrScannerComponent) qrScannerComponent!: QrScannerComponent;
 
-  constructor(public dialogRef: MatDialogRef<ScannerComponent>, private router: Router) { }
+  constructor(
+    public dialogRef: MatDialogRef<ScannerComponent>,
+    private router: Router,
+    private notify: SnotifyService
+  ) {}
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -41,15 +51,19 @@ export class ScannerComponent implements AfterViewInit {
 
       this.qrScannerComponent.capturedQr.subscribe((result: string) => {
         //TODO: parse result url, it should be of format https://smart-bins-vitb.web.app/engage/binuse/secret
-        // extract the secret and then 
-        let secret = 'EXTRACT THE SECRET'
-        this.router.navigate([`/engage/binuse/${secret}`]);
-        //window.location.href = result;
-        //window.open(result);
-        //console.log(result);
+        // extract the secret and then
+        let reg =
+          '^(http://www.|https://www.|http://|https://)?(smart-bins-vitb.web.app/engage/binuse)?(/.*)?$';
+        var regex = new RegExp(reg);
+        if (!result.match(reg)) {
+          this.notify.error('Incorrect URl', { timeout: 5000 });
+        } else {
+          let secret = 'EXTRACT THE SECRET';
+          this.router.navigate([`/engage/binuse/${secret}`]);
+        }
         this.close();
       });
-    }, 100)
+    }, 100);
   }
 
   close() {
