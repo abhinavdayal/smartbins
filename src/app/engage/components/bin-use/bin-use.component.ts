@@ -25,6 +25,7 @@ import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
+import { FigurecardComponent } from 'src/app/shared/figurecard/figurecard.component';
 
 @Component({
   selector: 'app-bin-use',
