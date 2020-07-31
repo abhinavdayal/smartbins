@@ -1,0 +1,13 @@
+<div fxLayout="row">
+    <button [disabled]="selectedindex==0" (click)="selectedindex=selectedindex-1" mat-button>Prev</button>
+    <mat-tab-group  #tabgroup [(selectedIndex)]="selectedindex">
+        <mat-tab *ngFor="let tab of content">
+            <div class="tab">
+                <img [src]="tab.backgoundimage">
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <!-- <mat-progress-bar mode="determinate" [value]="currenttime"></mat-progress-bar> -->
+    <button [disabled]="selectedindex==content.length-1" (click)="selectedindex=selectedindex+1"  mat-button>Next</button>
+
+</div>

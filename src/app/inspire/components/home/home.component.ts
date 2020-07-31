@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { CarouselContent } from 'src/app/shared/carousel/carousel.component';
 
 
 @Component({
@@ -8,7 +8,19 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  slides = [{'image': '../../../../assets/images/image.jpg'},{'image': '../../../../assets/images/image2.jpg'}, {'image': '../../../../assets/images/image2.png'},{'image': '../../../../assets/images/image3.jpg'}];
+  content = [
+    new CarouselContent('/assets/images/image.jpg', "Title1", "desc1", "url1"),
+    new CarouselContent('/assets/images/image2.jpg', "Title1", "desc1", "url1"),
+    new CarouselContent('/assets/images/image3.jpg', "Title1", "desc1", "url1"),
+    new CarouselContent('/assets/images/image4.jpg', "Title1", "desc1", "url1"),
+    ]
+
+  cards = [
+    {title: 'Events', description:'sdr', icon: 'event', action: 'action'},
+    {title: 'Events', description:'sdr', icon: 'campaign', action: 'action'},
+    {title: 'Events', description:'sdr', icon: 'close', action: 'action'}
+  ]
+
   constructor() { }
 
   ngOnInit(): void {

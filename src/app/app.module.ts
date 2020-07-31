@@ -16,7 +16,6 @@ import { ProfileDialogComponent } from './dialogs/profile-dialog/profile-dialog.
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from './shared/shared.module';
 import { ScannerComponent } from './dialogs/scanner/scanner.component';
 import { NgQrScannerModule } from 'angular2-qrscanner';
@@ -43,7 +42,6 @@ import { NgQrScannerModule } from 'angular2-qrscanner';
     AngularFireDatabaseModule, // Firebase database module
     AngularMaterialModule,
     SnotifyModule,
-    NgbModule,
     SharedModule,
     NgQrScannerModule,
   ],

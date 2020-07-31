@@ -1,86 +1,92 @@
 <app-animated-counter count="1256"></app-animated-counter>
+<!--TODO Probabe sections that can come here
 
-<mat-carousel
-  timings="250ms ease-in"
-  [autoplay]="true"
-  interval="5000"
-  color="accent"
-  maxWidth="auto"
-  proportion="40"
-  slides="5"
-  [loop]="true"
-  [hideArrows]="false"
-  [hideIndicators]="false"
-  [useKeyboard]="true"
-  [useMouseWheel]="false"
-  orientation="ltr"
->
-  <mat-carousel-slide
-    #matCarouselSlide
-    *ngFor="let slide of slides; let i = index"
-    [image]="slide.image"
-    overlayColor="#00000040"
-    [hideOverlay]="false"
-  ></mat-carousel-slide>
-</mat-carousel>
+  TOP: carousel nicely styled
+  Analytics: total count of how many people have used and benefited, reward points earned thus far. // COOK
+  // number of people
+  // number of bins
+  // total reward points earned
+  Features: what does this application do
+  Blogs: some blogging tab that hosts the blog, inspiring stories
+  Social sharing: share on facebook
+  Share your story
+  community services
+-->
+<app-carousel [content]="content"></app-carousel>
 <div class="float-container" fxLayout.xs="column" fxLayout="row wrap" fxLayoutGap="8px ">
-<div class="float-child" >
-<mat-card class="example-card" [class.mat-elevation-z12]="true" >
+  <mat-card *ngFor="let card of cards" class="example-card-1" [class.mat-elevation-z12]="true">
     <mat-card-header>
+      <mat-card-title>{{card.title}}</mat-card-title>
+    </mat-card-header>
+    <mat-icon>{{card.icon}}</mat-icon>
+    <mat-card-content>
+      <p>{{card.description}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [routerLink]='[card.action]'>EXPLORE</button>
+    </mat-card-actions>
+  </mat-card>
+  <!-- <div class="float-child"> -->
+    <!-- <mat-card class="example-card" [class.mat-elevation-z12]="true">
+      <mat-card-header>
         <mat-card-title>EVENTS</mat-card-title>
-    </mat-card-header>
-    <i class="material-icons " >event</i>
-    <mat-card-content>
-      <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
-        Events are shown here will be conducted by government or the events are conducted by different management 
-        across the nation regarding cleanliness of our surroundings. Participation increases acknowledgement for people around us about events. 
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>EXPLORE</button>
-    </mat-card-actions>
-  </mat-card>
-</div>
-<div class="float-child-1" layout="row">
-  <mat-card class="example-card-1" [class.mat-elevation-z12]="true">
-    <mat-card-header>
-        <mat-card-title>MONTHLY CHALLENGES</mat-card-title>
-    </mat-card-header>
-    <i class="material-icons ">campaign</i>
-    <mat-card-content>
-      <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
-        Monthly challenges are conducted by the organization regarding redemption of monthly challenge 
-        into reward points that help to user to earn money or valued objects through it. There will be rankings based on 
-        monthly challenge held every month.
-       </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>EXPLORE</button>
-    </mat-card-actions>
-  </mat-card>
-  </div>
-  <div class="float-child-2" layout="row" [class.mat-elevation-z12]="true">
-    <mat-card class="example-card-2">
-        <mat-card-header>
-            <mat-card-title>VIDEOS</mat-card-title>
-        </mat-card-header>
-        <i class="material-icons " >play_circle_filled</i>
+      </mat-card-header>
+      <mat-icon>event</mat-icon>
       <mat-card-content>
         <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
-          There will be different kind of videos all come under the cleanliness and swachh bharat activities conducted by government 
-          of india or different kinds of organizations for the purpose of cleanliness. Videos regarding events are also avaliable under this section. 
+          Events are shown here will be conducted by government or the events are conducted by different management
+          across the nation regarding cleanliness of our surroundings. Participation increases acknowledgement for
+          people around us about events.
         </p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-button>EXPLORE</button>
       </mat-card-actions>
     </mat-card>
-    </div>
-    </div>
-    
-  
- 
-<!-- footer -->
+  </div>
+  <div class="float-child-1" layout="row">
+    <mat-card class="example-card-1" [class.mat-elevation-z12]="true">
+      <mat-card-header>
+        <mat-card-title>MONTHLY CHALLENGES</mat-card-title>
+      </mat-card-header>
+      <mat-icon>campaign</mat-icon>
+      <mat-card-content>
+        <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
+          Monthly challenges are conducted by the organization regarding redemption of monthly challenge
+          into reward points that help to user to earn money or valued objects through it. There will be rankings based
+          on
+          monthly challenge held every month.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>EXPLORE</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <div class="float-child-2" layout="row" [class.mat-elevation-z12]="true">
+    <mat-card class="example-card-2">
+      <mat-card-header>
+        <mat-card-title>VIDEOS</mat-card-title>
+      </mat-card-header>
+      <mat-icon>play_circle_filled</mat-icon>
+      <mat-card-content>
+        <p style="font-family:georgia,garamond,serif;font-size:16px;font-style:italic;">
+          There will be different kind of videos all come under the cleanliness and swachh bharat activities conducted
+          by government
+          of india or different kinds of organizations for the purpose of cleanliness. Videos regarding events are also
+          avaliable under this section.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>EXPLORE</button>
+      </mat-card-actions>
+    </mat-card> -->
+  <!-- </div> -->
+</div>
+
+
+
+<!-- footer
 <footer  style="background-color: #2c292f">
   <div class="container">
       <div class="row ">
@@ -132,4 +138,4 @@
           </div>
       </div>  
   </div>
-</footer>
+</footer> -->

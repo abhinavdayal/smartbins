@@ -104,3 +104,12 @@
 .fullheight {
     min-height: calc(100vh);
 }
+
+
+.footer {
+    text-align: center;
+    flex-shrink: 0;
+    background-color: #333333;
+    color: white;
+    padding: 15px;
+  }

@@ -1,15 +1,6 @@
 <mat-sidenav-container class="content">
-  <mat-sidenav
-    #sidenav
-    [mode]="mobile ? 'over' : 'side'"
-    [ngClass]="{ fullwidth: mobile }"
-  >
-    <div
-      class="topheading"
-      fxLayout="row"
-      fxLayoutAlign="space-between center"
-      (click)="sidenav.close()"
-    >
+  <mat-sidenav #sidenav [mode]="mobile ? 'over' : 'side'" [ngClass]="{ fullwidth: mobile }">
+    <div class="topheading" fxLayout="row" fxLayoutAlign="space-between center" (click)="sidenav.close()">
       <a mat-button [routerLink]="['/']" class="title">
         <mat-icon class="logo">delete_sweep</mat-icon><span>Smartbins</span>
       </a>
@@ -21,11 +12,7 @@
         <mat-icon class="iconmargin">star</mat-icon>
         <span>Engage</span>
       </a>
-      <a
-        mat-list-item
-        *ngIf="!!user && !user.isAnonymous"
-        [routerLink]="['/manage']"
-      >
+      <a mat-list-item *ngIf="!!user && !user.isAnonymous" [routerLink]="['/manage']">
         <mat-icon class="iconmargin">map</mat-icon>
         <span>Manage</span>
       </a>
@@ -64,11 +51,7 @@
           <mat-icon class="iconmargin">star</mat-icon>
           <span>Engage</span>
         </a>
-        <a
-          *ngIf="!!user && !user.isAnonymous"
-          mat-button
-          [routerLink]="['/manage']"
-        >
+        <a *ngIf="!!user && !user.isAnonymous" mat-button [routerLink]="['/manage']">
           <mat-icon class="iconmargin">map</mat-icon>
           <span>Manage</span>
         </a>
@@ -103,13 +86,8 @@
         </mat-menu>
       </div>
 
-      <img
-        [matMenuTriggerFor]="menu"
-        *ngIf="!!user"
-        [src]="user.photoURL"
-        default="/assets/images/user.svg"
-        class="userimage"
-      />
+      <img [matMenuTriggerFor]="menu" *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg"
+        class="userimage" />
     </mat-toolbar>
     <div class="fullheight">
       <div class="warning" *ngIf="!!user && user.isAnonymous">
@@ -123,3 +101,15 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+<mat-toolbar class="footer">
+  <mat-toolbar-row fxLayoutAlign="center center">
+    <a mat-button href="smartbins@vishnu.edu.in?Subject=Testimonial" target="_top">
+      <mat-icon>email</mat-icon>
+      <span style="margin-left:10px">CONTACT US</span>
+    </a>
+  </mat-toolbar-row>
+  <mat-toolbar-row fxLayoutAlign="center center">
+    <p>Social sharing icons can come here</p>
+  </mat-toolbar-row>
+
+</mat-toolbar>
