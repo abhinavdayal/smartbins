@@ -9,7 +9,6 @@ export class  COLLECTIONS {
 }
 
 export class SmartbinUser {
-    id: string; //firebase id
     uid: string; // google id
     email: string;
     name: string;
@@ -18,6 +17,8 @@ export class SmartbinUser {
     locationUpdated: number;
     total_use_count: number;
     total_weight_thrown: number;
+    isAnonymous: boolean;
+    lastUsed: number;
 
     constructor(user: User, name?: string) {
         this.uid = user.uid;
@@ -26,11 +27,11 @@ export class SmartbinUser {
         this.role = "user";
         this.total_use_count = 0;
         this.total_weight_thrown = 0;
+        this.isAnonymous = user.isAnonymous;
     }
 }
 
 export class Bin {
-    id: string;
     code: string;
     name: string;
     currentLocation: GeoLocation;
@@ -46,7 +47,7 @@ export class Bin {
 
     constructor(code: string, user: SmartbinUser, capacity: number, type: string, name: string, lat?: number, lon?:number) {
         this.code = code;
-        this.manager = user.id;
+        this.manager = user.uid;
         this.name = name;
         this.resetDate = Date.now();
         this.lastUsed = Date.now();
@@ -78,8 +79,7 @@ export class ScanData {
 }
 
 export class Binusage {
-    id: string;
-    binid: string;
+    bincode: string;
     usedby: string;
     time: number;
     currentweight_gm: number;
@@ -87,8 +87,8 @@ export class Binusage {
 
     constructor(data: ScanData, user: SmartbinUser, bin: Bin) {
         //TODO: popylate from ecryoted message
-        this.binid = bin.id;
-        this.usedby = user.id
+        this.bincode = bin.code;
+        this.usedby = user.uid
         this.time = data.time
         this.currentlevel_percent = data.level
         this.currentweight_gm = data.weight
@@ -103,7 +103,6 @@ export class BinWorker {
 }
 
 export class BinManager {
-    id: string;
     userid: string;
 }
 
@@ -120,7 +119,6 @@ export class GeoLocation {
 }
 
 export class MonthlyProfile {
-    id: string;
     month: number;
     year: number;
     userid: string;
@@ -133,12 +131,11 @@ export class MonthlyProfile {
         this.year = d.getFullYear();
         this.total_use_count = 0;
         this.total_weight_thrown = 0;
-        this.userid = user.id;
+        this.userid = user.uid;
     }
 }
 
 export class MonthlyHistogram {
-    id: string;
     month: number;
     year: number;
     target: number;

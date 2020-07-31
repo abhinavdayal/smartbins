@@ -1,0 +1,11 @@
+<div class="scanner-view">
+  <h2>Scan QR Code</h2>
+  <p>After using the SmartBin</p>
+  <div class="scanner">
+    <qr-scanner [debug]="false" [canvasWidth]="1080" [canvasHeight]="720" [stopAfterScan]="true" [updateTime]="500">
+    </qr-scanner>
+    <p class="frame left">[</p>
+    <p class="frame right">]</p>
+  </div>
+  <button mat-stroked-button (click)="close()">Cancel</button>
+</div>

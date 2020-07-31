@@ -1,8 +1,122 @@
-<mat-list *ngIf="user" role="list">
-    <!-- TODO Make it a timeline kind of chart to show last 30 day usage-->
-    <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage">{{u.time}}, {{u.binid}}, {{u.usedby}}, {{u.currentweight_gm}}, {{u.currentlevel_percent}}</mat-list-item>
+<app-challenge></app-challenge>
+<mat-list>
+  <!-- TODO Make it a timeline kind of chart to show last 30 day usage-->
+  <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage"
+    >{{ u.time }}, {{ u.bincode }}, {{ u.usedby }}, {{ u.currentweight_gm }},
+    {{ u.currentlevel_percent }}</mat-list-item
+  >
 </mat-list>
 
+<div
+  class="container"
+  fxLayout="row"
+  fxLayout.sm="column"
+  fxLayout.xs="column"
+  fxLayoutAlign.gt-md="space-around center"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="0"
+>
+  <div fxFlex="40">
+    <mat-card class="spinner-card">
+      <mat-card-content class="spinner">
+        <h2 class="example-h2">Raviteja</h2>
+        <mat-progress-spinner
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="value"
+          [diameter]="150"
+        >
+        </mat-progress-spinner>
+        <div class="progress-value">{{ value }}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex="30">
+    <mat-card>
+      <mat-card-content>
+        <div>
+          <div class="charts-block">
+            <canvas
+              baseChart
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [plugins]="barChartPlugins"
+              [legend]="barChartLegend"
+              [chartType]="barChartType"
+            >
+            </canvas>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div fxFlex="30">
+    <mat-card>
+      <mat-card-content>
+        <div>
+          <div class="charts-block">
+            <canvas
+              baseChart
+              [datasets]="barChartData_two"
+              [labels]="barChartLabels_two"
+              [options]="barChartOptions_two"
+              [plugins]="barChartPlugins_two"
+              [legend]="barChartLegend_two"
+              [chartType]="barChartType_two"
+            >
+            </canvas>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div
+  class="container"
+  fxLayout="row"
+  fxLayout.sm="column"
+  fxLayout.xs="column"
+  fxLayoutAlign.gt-md="space-around center"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="0"
+>
+  <div fxFlex="70" *ngIf="user" class="boxes">
+    <mat-grid-list cols="2" rowHeight="225px" gutterSize="20px">
+      <mat-grid-tile class="tile">
+        <mat-grid-tile-header>Total Weight</mat-grid-tile-header>
+        <p>
+          <span style="font-size: 35px;">{{
+            this.user.total_weight_thrown
+          }}</span
+          >kg
+        </p>
+      </mat-grid-tile>
+      <mat-grid-tile class="tile">
+        <mat-grid-tile-header>Current Month Use</mat-grid-tile-header>
+        <p>
+          <span style="font-size: 35px;">{{ currentMonthUse }}</span
+          >%
+        </p>
+      </mat-grid-tile>
+      <mat-grid-tile class="tile">
+        <mat-grid-tile-header>Current Month Weight</mat-grid-tile-header>
+        <p>
+          <span style="font-size: 35px;">{{ currentMonthWeight }}</span
+          >kg
+        </p>
+      </mat-grid-tile>
+      <mat-grid-tile class="tile">
+        <mat-grid-tile-header>Total Use Count</mat-grid-tile-header>
+        <p>
+          <span style="font-size: 35px;">{{ this.user.total_use_count }}</span>
+        </p>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>
 <!--
     TODO, display the total useage from userprofile
     {{user.total_use_count}} {{user.total_weight_thrown}}

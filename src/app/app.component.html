@@ -1,26 +1,41 @@
 <mat-sidenav-container class="content">
-  <mat-sidenav #sidenav [mode]="mobile?'over':'side'" [ngClass]="{'fullwidth':mobile}">
-    <div class="topheading" fxLayout="row" fxLayoutAlign="space-between center" (click)="sidenav.close()">
+  <mat-sidenav
+    #sidenav
+    [mode]="mobile ? 'over' : 'side'"
+    [ngClass]="{ fullwidth: mobile }"
+  >
+    <div
+      class="topheading"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      (click)="sidenav.close()"
+    >
       <a mat-button [routerLink]="['/']" class="title">
         <mat-icon class="logo">delete_sweep</mat-icon><span>Smartbins</span>
       </a>
       <mat-icon>close</mat-icon>
     </div>
+    <p *ngIf="!!user">{{ !!user.name ? user.name : "Anonymous" }}</p>
     <mat-nav-list fxLayout="column" class="navlist">
       <a mat-list-item *ngIf="!!user" [routerLink]="['/engage']">
         <mat-icon class="iconmargin">star</mat-icon>
         <span>Engage</span>
       </a>
-      <a mat-list-item *ngIf="!!user && !user.isAnonymous" [routerLink]="['/manage']">
+      <a
+        mat-list-item
+        *ngIf="!!user && !user.isAnonymous"
+        [routerLink]="['/manage']"
+      >
         <mat-icon class="iconmargin">map</mat-icon>
         <span>Manage</span>
       </a>
-      <a mat-list-item *ngIf="!user" (click)="openLoginDialog()">
+      <a mat-list-item *ngIf="!user" (click)="logingoogle()">
         <mat-icon class="iconmargin">login</mat-icon>Sign in
       </a>
-      <a mat-list-item *ngIf="!!user && user.isAnonymous" (click)="openProfileDialog()">
+      <a mat-list-item *ngIf="!!user" (click)="openProfileDialog()">
         <mat-icon class="iconmargin">account_circle</mat-icon>
-        <span>Link Account</span>
+        <span *ngIf="user.isAnonymous">Link Account</span>
+        <span *ngIf="!user.isAnonymous">Edit Name</span>
       </a>
       <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
           <mat-icon>account_circle</mat-icon>
@@ -33,7 +48,6 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-
     <mat-toolbar color="primary">
       <div fxHide.gt-sm>
         <button mat-icon-button (click)="sidenav.toggle()">
@@ -50,28 +64,34 @@
           <mat-icon class="iconmargin">star</mat-icon>
           <span>Engage</span>
         </a>
-        <a *ngIf="!!user && !user.isAnonymous" mat-button [routerLink]="['/manage']">
+        <a
+          *ngIf="!!user && !user.isAnonymous"
+          mat-button
+          [routerLink]="['/manage']"
+        >
           <mat-icon class="iconmargin">map</mat-icon>
           <span>Manage</span>
         </a>
       </div>
-      <button mat-raised-button>
+      <button mat-raised-button (click)="openScannerDialog()">
         <mat-icon class="iconmargin">qr_code_scanner</mat-icon> Scan
       </button>
       <span class="spacer"></span>
       <div fxHide.lt-sm>
-        <button *ngIf="!user" mat-button (click)="openLoginDialog()">
+        <button *ngIf="!user" mat-button (click)="logingoogle()">
           <mat-icon class="iconmargin">login</mat-icon>Sign in
         </button>
         <button *ngIf="!!user" mat-button [matMenuTriggerFor]="menu">
-          <span *ngIf="!user.isAnonymous">{{user.displayName}}</span>
+          <span *ngIf="!user.isAnonymous">{{ user.name }}</span>
           <span *ngIf="user.isAnonymous">Anonymous</span>
         </button>
         <mat-menu #menu="matMenu">
-          <button *ngIf="!!user && user.isAnonymous" mat-menu-item (click)="openProfileDialog()">
+          <button mat-menu-item *ngIf="!!user" (click)="openProfileDialog()">
             <mat-icon class="iconmargin">account_circle</mat-icon>
-            <span>Link Account</span>
+            <span *ngIf="user.isAnonymous">Link Account</span>
+            <span *ngIf="!user.isAnonymous">Edit Name</span>
           </button>
+
           <!-- <button *ngIf="!!user && !user.isAnonymous" mat-menu-item (click)="changeuser()">
             <mat-icon>account_circle</mat-icon>
             <span>Switch User</span>
@@ -83,11 +103,20 @@
         </mat-menu>
       </div>
 
-      <img *ngIf="!!user" [src]="user.photoURL" default="/assets/images/user.svg" class="userimage">
+      <img
+        [matMenuTriggerFor]="menu"
+        *ngIf="!!user"
+        [src]="user.photoURL"
+        default="/assets/images/user.svg"
+        class="userimage"
+      />
     </mat-toolbar>
     <div class="fullheight">
       <div class="warning" *ngIf="!!user && user.isAnonymous">
-        <p>If you close this session without signing in you will lose all Anonymous credits!</p>
+        <p>
+          If you close this session without signing in you will lose all
+          Anonymous credits!
+        </p>
       </div>
       <router-outlet></router-outlet>
       <ng-snotify></ng-snotify>

@@ -7,13 +7,14 @@ import { CrudService } from './data/crud.service'
 import { AuthService } from './auth/services/auth.service';
 import { User } from 'firebase';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators'
+import { take, filter } from 'rxjs/operators'
 import { SmartbinUser, GeoLocation, COLLECTIONS } from './data/models';
 import { GeolocationService } from './services/geolocation.service'
-import { DocumentChangeAction } from '@angular/fire/firestore';
+import { MessagingService } from './services/messaging.service'
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { ProfileDialogComponent } from './dialogs/profile-dialog/profile-dialog.component';
+import { ScannerComponent } from './dialogs/scanner/scanner.component';
 
 @Component({
   selector: 'app-root',
@@ -23,14 +24,17 @@ import { ProfileDialogComponent } from './dialogs/profile-dialog/profile-dialog.
 export class AppComponent implements OnInit {
   title = 'smartbins';
   promptEvent: any;
-  user: User;
-  binUser: SmartbinUser;
+  firebaseuser: User;
+  user: SmartbinUser;
   curloc: GeoLocation;
+
+
+  readonly VAPID_PUBLIC_KEY = "BKzrzNzpjVEzg_nuywGafdKAzXiHqSWVTJ5Y0pOGC5FXfhI0BZ2Zan1T1_8bXq49-Euo8DNqsOSsDqXbF_EX9o8";
 
   constructor(private snotifyService: SnotifyService, private swUpdate: SwUpdate,
     private router: Router, private swPush: SwPush,
     private authService: AuthService, private crud: CrudService, private geoloc: GeolocationService,
-    public dialog: MatDialog
+    public dialog: MatDialog, private msg: MessagingService
   ) {
     window.addEventListener('beforeinstallprompt', event => {
       this.promptEvent = event;
@@ -52,11 +56,12 @@ export class AppComponent implements OnInit {
     this.authService.loginWithGoogle();
   }
 
-  logoutrequested = false;
 
   logout() {
-    this.logoutrequested = true;
+    this.geoloc.end();
     this.authService.logout();
+    this.user = null;
+    this.firebaseuser = null;
   }
 
   installPwa(): void {
@@ -107,48 +112,48 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // todo, show icon on left
+    this.msg.currentMessage.subscribe((m: any) => {
+      this.snotifyService.html(`
+      <div class="snotifyToast__title"><b>${m.notification.title}</b></div>
+      <div class="snotifyToast__body">${m.notification.body}</div>
+      `, { timeout: 10000 })
+    })
+
+    this.authService.LoginRequested.subscribe(r => {
+      if (r) this.openLoginDialog();
+    })
 
     this.geoloc.CurrentLocation.subscribe(l => {
-      this.curloc = l;
-      this.updateUserLoc(l);
-    })
-
-    this.authService.smartbinUser.subscribe(u => {
-      if (!!u) {
-        this.geoloc.start()
-      } else (this.geoloc.end())
-      this.binUser = u;
-    });
-
-
-
-    this.authService.User.subscribe((u: User) => {
-      this.user = u;
-      if (!this.user) {
-        if (!this.logoutrequested) this.openLoginDialog();
-      } else {
-        // get or create firebase user
-        this.crud.FetchUser(u.uid).subscribe((r: DocumentChangeAction<SmartbinUser>[]) => {
-          //this.snotifyService.success("loggedin", {timeout: 5000});
-          if (!!r && r.length > 0) {
-            // fetch user
-            //console.log(r);
-            let s = r.map(e => { return { id: e.payload.doc.id, ...e.payload.doc.data() } as SmartbinUser })[0];
-            this.authService.setSmartbinUser(s);
-          } else {
-            // create a new user
-            let s = new SmartbinUser(u);
-            s.recentLocation = this.curloc;
-            s.locationUpdated = Date.now();
-            this.crud.create(s, COLLECTIONS.USERS)
-          }
-        }), error => {
-          //console.log(error)
+      this.authService.updateSmartbinUser(
+        {
+          recentLocation: l,
+          locationUpdated: Date.now()
         }
-
-      }
+      )
     })
 
+    this.authService.User.pipe(filter(user => !!user)).pipe(take(1))
+      .subscribe(user => {
+        //this.msg.getPermission(user)
+        //this.msg.monitorRefresh(user);
+        //this.msg.receiveMessages();
+        this.authService.getSmartbinUser(user)
+      })
+
+    this.authService.smartbinUser.pipe(filter(user => !!user)).pipe(take(1))
+      .subscribe(u => {
+        console.log("here")
+        this.geoloc.start()
+        this.user = u;
+      })
+
+  }
+
+  openScannerDialog(): void {
+    const dialogRef = this.dialog.open(ScannerComponent);
+    // dialogRef.afterClosed().subscribe(result => {
+    // });
   }
 
   openLoginDialog(): void {
@@ -157,11 +162,13 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.logoutrequested = false;
+
       if (result == "anonymous") {
         this.authService.anonymousLogin();
       } else if (result == "google") {
         this.logingoogle();
+      } else {
+        this.router.navigate(['/']);
       }
     });
   }
@@ -172,37 +179,39 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!!result) {
-        this.authService.linkWithGoogle(this.user).then(u => {
-          //console.log(u);
-          u.user.updateProfile({ displayName: result })
-          let s = new SmartbinUser(u.user, result);
-          s.recentLocation = this.curloc;
-          s.locationUpdated = Date.now();
-          s.id = this.binUser.id;
-          this.crud.update(s, COLLECTIONS.USERS)
-          this.authService.setSmartbinUser(s);
-        }).catch((e) => {
-          //console.log(e);
-          if (e.code == 'auth/credential-already-in-use') {
-            // TODO. move all of user's data to this one and delete this user
-            // way is to take anon user uid and fetch all usage data. and move to newly created user.
-            this.snotifyService.warning("You already have an account. Please signin using that account. You will lose your", { timeout: 10000 });
-            this.authService.SigninWithCredentials(e.credential);
-          }
-        })
+      if (this.user.isAnonymous) {
+        if (!!result) {
+          this.authService.linkWithGoogle(this.firebaseuser).then(u => {
+            //console.log(u);
+            this.RenameUser(result, u);
+          }).catch((e) => {
+            //console.log(e);
+            if (e.code == 'auth/credential-already-in-use') {
+              // TODO. move all of user's data to this one and delete this user
+              // way is to take anon user uid and fetch all usage data. and move to newly created user.
+              this.snotifyService.warning("You already have an account. Please signin using that account.", { timeout: 10000 });
+              //this.authService.SigninWithCredentials(e.credential);
+            }
+          })
+        }
+      } else {
+        this.RenameUser(result);
       }
     });
   }
 
-  private updateUserLoc(l: GeoLocation) {
-    if (!!this.binUser) {
-      this.binUser.recentLocation = l;
-      this.binUser.locationUpdated = Date.now();
-      //console.log(this.binUser)
-      if (!this.binUser.name && !!this.user.displayName)
-        this.binUser.name = this.user.displayName;
-      this.crud.update(this.binUser, COLLECTIONS.USERS);
+  private RenameUser(name: any, u?: any) {
+    this.user.name = name;
+    if (!!u) {
+      this.user.email = u.user.email;
+      this.authService.updateSmartbinUser({
+        name: name,
+        email: u.user.email
+      });
+    } else {
+      this.authService.updateSmartbinUser({
+        name: name
+      });
     }
   }
 

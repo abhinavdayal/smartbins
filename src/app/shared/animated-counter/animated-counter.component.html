@@ -1,0 +1,11 @@
+<div style="height: 200px; margin-bottom: 20px;" fxLayout="column" fxLayoutAlign="space-between center">
+    <div fxLayout="column" fxLayoutAlign="center center">
+        <h3 class="label">{{label | titlecase}}</h3>
+        <span class="subtitle">{{footnote}}</span>
+    </div>
+
+    <div class="animated-counter">
+    <span [ngStyle]="{'font-size':dynamicsize}">{{count | number:'1.0-0'}}</span><span style="font-size: 20pt">{{suffix}}</span>
+    </div>
+
+</div>

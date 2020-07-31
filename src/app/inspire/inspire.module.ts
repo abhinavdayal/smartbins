@@ -7,6 +7,7 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
+import { SharedModule } from 'src/app/shared/shared.module'
 // This module is to add blogs, information etc. to motivate and educate user
 
 @NgModule({
@@ -16,7 +17,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     InspireRoutingModule,
     AngularMaterialModule,
     FlexLayoutModule,
-    MatCarouselModule.forRoot()
+    MatCarouselModule.forRoot(),
+    FlexLayoutModule,
+    AngularMaterialModule,
+    SharedModule
   ]
 })
 export class InspireModule { }

@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "BinUsages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "usedby",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "time",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
