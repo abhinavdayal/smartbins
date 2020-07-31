@@ -2,45 +2,25 @@
     max-width: 400px;
   }
  
-  .example-card-1 {
-    max-width: 400px;
-  }
-  .example-card-2 {
-    max-width: 400px;
-  }
-  .float-container {
-      display: flex; 
-      background-color: skyblue;
-}
+  
 .image{
   width: 300px;
   height: 300px;
 }
-.float-child {
-   flex:1;
-    display: table-cell;
-    float: right;
-    margin: 8px 8px 8px 0;
-} 
-.float-child-1 {
-  flex:1;
-  display: table-cell;
-  float: right;
-  margin: 8px 8px 8px 0;
-}  
-.float-child-2 {
-  flex:1;
-  display: table-cell;
-  float: right;
-  margin: 8px 8px 8px 0;
-}  
 
-// footer{
-//   background-color: black;
-// }
+.example-card {
+  align-items: center;
+   flex:1;
+} 
 .material-icons{
   font-size: 100px;
 }
-//  .mat-card-header{
-//    background-color: aliceblue;
-//  }
+
+.card{
+  text-align: left;
+}
+ 
+.main{
+  background-color: lavender;
+}
+ 
