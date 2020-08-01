@@ -11,6 +11,11 @@ const routes: Routes = [
     canLoad: [AuthGuard],
   },
   {
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
     path: 'manage',
     loadChildren: () =>
       import('./manage/manage.module').then((m) => m.ManageModule),

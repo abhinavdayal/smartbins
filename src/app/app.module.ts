@@ -19,6 +19,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from './shared/shared.module';
 import { ScannerComponent } from './dialogs/scanner/scanner.component';
 import { NgQrScannerModule } from 'angular2-qrscanner';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { NgQrScannerModule } from 'angular2-qrscanner';
     ReactiveFormsModule,
     AppRoutingModule,
     FlexLayoutModule,
+    HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),

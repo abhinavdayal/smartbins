@@ -5,9 +5,9 @@ import { AdminGuard } from 'src/app/auth/guards/admin.guard';
 
 const routes: Routes = [
     {
-        path: 'garbagedetector',
+        path: 'detector',
         component: GarbageDetectorComponent,
-        canActivate: [AdminGuard],
+        //canActivate: [AdminGuard],
       },
 ];
 
