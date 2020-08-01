@@ -3,11 +3,19 @@
         height: 500px;
         width:100%;
         object-fit: cover;
+        
     }
+}
+
+.button {
+    width: 40px;
+    z-index: 100;
+    color: white;
 }
 
 .header-less-tabs.mat-tab-group{
     flex: 1 1 0;
+    margin: 0 -40px;
     .mat-tab-header {
         display: none;
     }

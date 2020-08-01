@@ -12,36 +12,21 @@
   community services
 -->
 <div class="main">
-<app-carousel [content]="content"></app-carousel>
-<div class="analytics" fxLayout.xs="column" fxLayout="row wrap" fxLayoutGap="100px" fxLayoutAlign="center center">
-  <app-animated-counter class="analytic child" count="10" label="Users"></app-animated-counter>
-  <app-animated-counter class="analytic child" count="7" label="Bins"></app-animated-counter>
-  <app-animated-counter class="analytic child" count="1432" label="Rewards"></app-animated-counter>
-</div>
+  <app-carousel [content]="content"></app-carousel>
+  <div class="analytics" fxLayout.xs="column" fxLayout="row wrap" fxLayoutGap="100px" fxLayoutAlign="center center">
+    <app-animated-counter count="10" label="Users" footnote="system wide"></app-animated-counter>
+    <app-animated-counter count="7" label="Bins" footnote="managed by us"></app-animated-counter>
+    <app-animated-counter count="1432" label="Rewards" footnote="delivered thus far"></app-animated-counter>
+  </div>
 
-<div class="analytics" fxLayout.xs="row" fxLayoutGap="9px" fxLayoutAlign="center center">
-  <mat-card> 
-    <mat-card-title>Features of Smarttbin</mat-card-title>
-    <mat-card-subtitle>Highlights of smartbin</mat-card-subtitle>
-  </mat-card>
-</div>
+  <h1 class="lead">Features</h1>
 
 
-<div  fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="center center" > 
-  <div class="card" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let card of cards">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{card.title}}</mat-card-title>
-      </mat-card-header>
+  <div class="features" fxLayout="row wrap" fxLayoutAlign="center baseline">
+    <mat-card *ngFor="let card of cards">
       <mat-icon>{{card.icon}}</mat-icon>
-      <mat-card-content>
-        <p>{{card.description}}</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button [routerLink]='[card.action]'>EXPLORE</button>
-      </mat-card-actions>
+      <h2>{{card.title}}</h2>
+      <p>{{card.description}}</p>
     </mat-card>
   </div>
 </div>
-</div>
- 

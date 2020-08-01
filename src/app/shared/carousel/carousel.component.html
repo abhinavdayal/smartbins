@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="center center">
-    <button [disabled]="selectedindex==0" (click)="selectedindex=selectedindex-1" mat-icon-button>
+    <button class="button" [disabled]="selectedindex==0" (click)="selectedindex=selectedindex-1" mat-icon-button>
         <mat-icon>arrow_back_ios</mat-icon>
     </button>
     <mat-tab-group class="header-less-tabs" mat-align-tabs="center" [(selectedIndex)]="selectedindex">
@@ -10,7 +10,7 @@
         </mat-tab>
     </mat-tab-group>
     <!-- <mat-progress-bar mode="determinate" [value]="currenttime"></mat-progress-bar> -->
-    <button [disabled]="selectedindex==content.length-1" (click)="selectedindex=selectedindex+1" mat-icon-button>
+    <button class="button"  [disabled]="selectedindex==content.length-1" (click)="selectedindex=selectedindex+1" mat-icon-button>
         <mat-icon>arrow_forward_ios</mat-icon>
     </button>
 
