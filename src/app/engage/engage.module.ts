@@ -7,7 +7,7 @@ import { AngularMaterialModule } from '../angular-material.module';
 import { BinsNearMeComponent } from './components/bins-near-me/bins-near-me.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChallengeComponent } from './components/challenge/challenge.component';
-
+import { SharedModule } from 'src/app/shared/shared.module';
 // this module is for user's dashboard, comparitive dashboards and monthly challenges
 
 @NgModule({
@@ -18,6 +18,7 @@ import { ChallengeComponent } from './components/challenge/challenge.component';
     FlexLayoutModule,
     AngularMaterialModule,
     ChartsModule,
+    SharedModule,
   ],
 })
 export class EngageModule {}

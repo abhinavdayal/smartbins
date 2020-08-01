@@ -16,6 +16,9 @@ import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.compon
 import { ProfileDialogComponent } from './dialogs/profile-dialog/profile-dialog.component';
 import { ScannerComponent } from './dialogs/scanner/scanner.component';
 
+import {DomSanitizer} from '@angular/platform-browser';
+import {MatIconRegistry} from '@angular/material/icon';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -34,8 +37,13 @@ export class AppComponent implements OnInit {
   constructor(private snotifyService: SnotifyService, private swUpdate: SwUpdate,
     private router: Router, private swPush: SwPush,
     private authService: AuthService, private crud: CrudService, private geoloc: GeolocationService,
-    public dialog: MatDialog, private msg: MessagingService
+    public dialog: MatDialog, private msg: MessagingService,private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer
   ) {
+    this.iconRegistry.addSvgIcon(
+      'twitter',
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/icons/twitter.svg'));
+
+
     window.addEventListener('beforeinstallprompt', event => {
       this.promptEvent = event;
     });
