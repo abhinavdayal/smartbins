@@ -9,6 +9,29 @@ export const helloWorld = functions.https.onRequest((request, response) => {
     response.send("Hello from Firebase!");
 });
 
+export const processScan = functions.firestore.document('scans/{scanid}').onCreate(event=>{
+    const scan = event.data();
+    //scan.userid
+    //scan.encryptedcode
+
+    // DO ALL THE THINGS
+    // decode 
+    // check if bin exists
+    // if duplicate
+    // add binusage
+    // admin.firestore().collection('Bins/121233eghhj').doc().
+    // update bin stats
+    // update user stats
+    // update monthly profile
+    // update monthly histogram
+
+    //if there is and error we send a message frm system to the user in a message collection
+
+    // send a success or error message to user
+    mid = Date.now().toString()
+    //admin.firestore().collection('messages/{mid}').doc().set({})
+})
+
 export const notifyUser = functions.firestore.document('messages/{messageId}').onCreate(event => {
     const message = event.data();
     const userId = message.recipientId;
