@@ -1,10 +1,20 @@
-<input accept='image/*' style="display: none"  type="file" (change)="onFileChanged($event)" #fileInput>
-<button matTooltip="Upload an Image" *ngIf="!uploading" mat-button (click)="fileInput.click()">
-    <mat-icon>cloud_upload</mat-icon> Send a pic for detection
-</button>
-<mat-card class="result" *ngIf="!!result">
-    <h1>{{result.classification[0]}}</h1>
-    <img [src]="result.image" *ngIf="!!result.image">
-</mat-card>
+<div class="container" fxLayout="row wrap" fxLayoutAlign="center center">
+    <div class="insat" fxLayout="column" fxLayoutAlign="center center">
+        <input accept='image/*' style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+        <button matTooltip="Upload an Image" [disabled]="uploading" mat-button (click)="fileInput.click()">
+            <mat-icon>cloud_upload</mat-icon> Send a pic for detection
+        </button>
+        
+        <mat-card class="result">
+            <h1 *ngIf="!!result && !!result.classification else indicator">{{result.classification[0]}}</h1>
+            <mat-progress-bar class="progress" *ngIf="uploading" mode="indeterminate"></mat-progress-bar>
+            <ng-template #indicator>
+                <h1 class="indicator">Detection task window</h1>
+            </ng-template>
+            
+            <img [src]="result.image" *ngIf="!!result && !!result.image">
+        </mat-card>
+    </div>
 
-<app-livecam (oncapture)="detect($event)"></app-livecam>
+    <app-livecam [busy]="uploading" (oncapture)="detect($event)"></app-livecam>
+</div>

@@ -15,17 +15,11 @@ import {
 import { Subscription } from 'rxjs';
 import { SnotifyService } from 'ng-snotify';
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
-import {
-  DocumentData,
-  DocumentChangeAction,
-  DocumentSnapshot,
-} from '@angular/fire/firestore';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
-import { FigurecardComponent } from 'src/app/shared/figurecard/figurecard.component';
 
 @Component({
   selector: 'app-bin-use',

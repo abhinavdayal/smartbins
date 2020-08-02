@@ -16,6 +16,10 @@
         <mat-icon class="iconmargin">map</mat-icon>
         <span>Manage</span>
       </a>
+      <a *ngIf="!!user && !user.isAnonymous" mat-list-item [routerLink]="['/admin']"> <!--TODO && user is admin-->
+        <mat-icon class="iconmargin">admin_panel_settings</mat-icon>
+        <span>Admin</span>
+      </a>
       <a mat-list-item *ngIf="!user" (click)="logingoogle()">
         <mat-icon class="iconmargin">login</mat-icon>Sign in
       </a>
@@ -35,7 +39,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" class="main">
       <div fxHide.gt-sm>
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
@@ -55,8 +59,12 @@
           <mat-icon class="iconmargin">map</mat-icon>
           <span>Manage</span>
         </a>
+        <a *ngIf="!!user && !user.isAnonymous" mat-button [routerLink]="['/admin']"> <!--TODO && user is admin-->
+          <mat-icon class="iconmargin">admin_panel_settings</mat-icon>
+          <span>Admin</span>
+        </a>
       </div>
-      <button mat-raised-button (click)="openScannerDialog()">
+      <button style="margin-left: 10px;" mat-raised-button (click)="openScannerDialog()">
         <mat-icon class="iconmargin">qr_code_scanner</mat-icon> Scan
       </button>
       <span class="spacer"></span>

@@ -30,10 +30,10 @@ export class GarbageDetectorComponent implements OnInit {
     if (f.size > this.maxSize || !this.isvalid(f.type.toLowerCase())) {
       alert("Only .jpg, .png, .svg image files up to 500KB are allowed")
     } else {
-      this.uploading = true;
       let reader = new FileReader();
       reader.onloadend = () => {
         let i = reader.result.toString()
+        
         this.SendForDetection(i);
       }
       reader.onerror = (error) => {
@@ -45,6 +45,8 @@ export class GarbageDetectorComponent implements OnInit {
 
 
   private SendForDetection(i: string) {
+    this.uploading = true;
+    this.result = {classification:['detecting...'], image: i}
     let data = i.substring(i.indexOf(',') + 1);
     this.detectionService.detect(data).pipe(take(1)).subscribe((d) => {
       this.uploading = false;

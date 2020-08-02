@@ -1,6 +1,6 @@
 <div id="app">
     <div><video #video id="video" width="640" height="480" autoplay></video></div>
-    <div><button id="snap" (click)="capture()">Snap Photo</button></div>
+    <button matTooltip="Or Click Live!" class="snap" mat-fab id="snap" [disabled]="busy" (click)="capture()"><mat-icon>camera</mat-icon></button>
     <canvas #canvas id="canvas" width="640" height="480"></canvas>
     <ul>
         <li *ngFor="let c of captures">

@@ -54,6 +54,19 @@
     margin-left: 5px;
 }
 
+.main {
+    a, a:focus, a:link, a:visited, a:active {
+        opacity: 0.8;
+        color: white !important;
+        transition: 0.3s all ease-in;
+    }
+    a:hover {
+        opacity: 1;
+        color: white !important
+    }
+
+}
+
 .topheading {
     padding: 20px;
     background-color: #3f51b5;
@@ -105,11 +118,11 @@
     min-height: calc(100vh);
 }
 
-
 .footer {
     text-align: center;
     flex-shrink: 0;
     background-color: #333333;
     color: white;
     padding: 15px;
-  }
+}
+

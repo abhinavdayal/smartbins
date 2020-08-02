@@ -1,9 +1,28 @@
+.container {
+    padding: 20px;
+    margin-top: 50px;
+
+    .indicator {
+        width: 400px;
+        height: 400px;
+        line-height: 400px;
+        text-align: center;
+        color: #aaa;
+    }
+}
 .result {
     width: 400px;
+    height: 400px;
+    margin: 30px;
     text-align: center;
     img {
-        width: 400px;
-        height: 300px;
+        width: 350px;
+        height: 250px;
         object-fit: cover;
     }
+}
+
+.progress {
+    width: 200px;
+    margin: 20px auto;
 }

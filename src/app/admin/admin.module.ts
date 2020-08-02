@@ -7,12 +7,13 @@ import { GarbageDetectorComponent } from './garbage-detector/garbage-detector.co
 import { AdminRoutingModule } from './admin-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { LivecamComponent } from './livecam/livecam.component';
+import { HomeComponent } from './home/home.component';
 
 
 
 
 @NgModule({
-  declarations: [GarbageDetectorComponent, LivecamComponent],
+  declarations: [GarbageDetectorComponent, LivecamComponent, HomeComponent],
   imports: [
     CommonModule,
     FlexLayoutModule,

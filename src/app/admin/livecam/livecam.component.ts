@@ -8,6 +8,7 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, Input, Output,
 export class LivecamComponent implements OnInit, AfterViewInit {
 
   @Input() autocapture: number = 0;
+  @Input() busy: boolean = false;
   @Output() oncapture:EventEmitter<any> = new EventEmitter<any>()
   @ViewChild("video")
   public video!: ElementRef;
