@@ -86,8 +86,7 @@ export class BinUseComponent implements OnInit, OnDestroy {
           if (!!params['encryptedmsg']) {
             // first check if this binusage already exist
             //TODO, see if this timestamp and binid already exist (avoid duplicates)
-            let scandata = new ScanData(params['encryptedmsg']);
-            this.VerifyAndUpdate(scandata);
+            this.VerifyAndUpdate(params['encryptedmsg']);
           }
         });
       });
@@ -151,19 +150,18 @@ export class BinUseComponent implements OnInit, OnDestroy {
     },
   ];
 
-  VerifyAndUpdate(scandata: ScanData) {
+  VerifyAndUpdate(scandata: string) {
     console.log('fetching bin');
-    let bin$ = this.crud.get(scandata.code, COLLECTIONS.BINS);
-    bin$
-      .get()
-      .pipe(take(1))
-      .subscribe((r) => {
-        if (!r.exists) {
-          this.notify.error('The Bin data is incorrect.', { timeout: 5000 });
-        } else {
-          this.CheckDuplicateAndAdd(r, scandata, bin$);
-        }
-      });
+    this.crud.FetchScan(scandata).pipe(take(1)).subscribe(d=>{
+      if (!!d && d.length>0) {
+        this.notify.error('The is already scanned.', { timeout: 5000 });
+      } else {
+        this.crud.create({
+          code: scandata,
+          uid: this.user.uid
+        }, 'scans')
+      }
+    })
   }
 
   private CheckDuplicateAndAdd(

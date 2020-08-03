@@ -171,4 +171,10 @@ export class CrudService {
       })
       .snapshotChanges();
   }
+
+  FetchScan(code: string) {
+    return this.db.collection('scans', (ref)=>{
+      return ref.where('code', '==', code)
+    }).valueChanges();
+  }
 }

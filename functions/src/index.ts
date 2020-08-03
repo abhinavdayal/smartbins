@@ -12,18 +12,41 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 // NOT SECURE, eventuyally a node service.
 class ScanData {
     //secretkey: 'key'
+    private readonly key: string = 'b9d538aaa978253be8806966fecd8631';
+    private readonly available: string = "#9876543210zyxwvutsrqponmlkjihgfedcba";
     time: number;
     code: string;
     level: number;
     weight: number;
 
-    constructor(encryptedmsg: string) {
+    constructor(message: string) {
         // TODO populate from encrypted message
-        this.time = 1595937020 * 1000; // to convert to millisecond
-        this.code = 'abcd1234'
-        this.level = 45
-        this.weight = 365
+        let decrypted = ''
+
+        let length=this.available.length;
+        for(let i=0, k=0; i<message.length; i++,k++)
+        {
+            if(k>=this.key.length)
+            {
+                k=0;
+            }
+            for(let j=0;j<length;j++)
+            {
+                if(message[i]==this.available[j])
+                {
+                    let index = (this.key[k].charCodeAt(0)+j) % length;
+                    decrypted += this.available[index];
+                }
+            }
+        }
+
+        let d = decrypted.split('#')
+        this.time = parseInt(d[0])
+        this.code = d[1]
+        this.level = parseInt(d[2])
+        this.weight = parseInt(d[3])
     }
+
 }
 
 function addBinUsage(data: any, scan: any) {
@@ -139,7 +162,7 @@ function updateMonthlyHist(total_use_count: number) {
 
 export const processScan = functions.firestore.document('scans/{scanid}').onCreate(event => {
     const scan = { ...event.data() };
-    const data = new ScanData(scan.code)
+    const data = new ScanData(scan.code);
 
     admin.firestore().collection(`Bins/${data.code}`).doc().get().then(binref => {
         if (binref.exists) {
