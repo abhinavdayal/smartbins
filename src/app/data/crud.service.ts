@@ -69,12 +69,12 @@ export class CrudService {
       .collection<MonthlyHistogram>(COLLECTIONS.MONTHLYHIST)
       .doc(id);
   }
+  
   fetchCurrentYearMonthlyProfiles(userid: string) {
     let d = new Date();
-    return this.db
-      .collection<MonthlyProfile>(COLLECTIONS.MONTHLYPROFILE, (ref) => {
+    console.log(userid, d.getFullYear())
+    return this.db.collection<MonthlyProfile>(COLLECTIONS.MONTHLYPROFILE, (ref) => {
         return ref
-          .where('month', '==', d.getMonth())
           .where('year', '==', d.getFullYear())
           .where('userid', '==', userid);
       })

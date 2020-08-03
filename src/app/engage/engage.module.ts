@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChartsModule } from 'ng2-charts';
 import { EngageRoutingModule } from './engage-routing.module';
 import { BinUseComponent } from './components/bin-use/bin-use.component';
 import { AngularMaterialModule } from '../angular-material.module';
@@ -8,6 +7,7 @@ import { BinsNearMeComponent } from './components/bins-near-me/bins-near-me.comp
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChallengeComponent } from './components/challenge/challenge.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { GoogleChartsModule } from 'angular-google-charts';
 // this module is for user's dashboard, comparitive dashboards and monthly challenges
 
 @NgModule({
@@ -17,8 +17,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     EngageRoutingModule,
     FlexLayoutModule,
     AngularMaterialModule,
-    ChartsModule,
     SharedModule,
+    GoogleChartsModule
   ],
 })
 export class EngageModule {}

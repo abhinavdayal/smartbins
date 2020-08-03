@@ -1,133 +1,61 @@
 <!-- <app-challenge></app-challenge> -->
-<mat-list>
-  <!-- TODO Make it a timeline kind of chart to show last 30 day usage-->
-  <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage"
+<!-- <mat-list> -->
+<!-- TODO Make it a timeline kind of chart to show last 30 day usage-->
+<!-- <mat-list-item role="listitem" *ngFor="let u of currentMonthBinUsage"
     >{{ u.time }}, {{ u.bincode }}, {{ u.usedby }}, {{ u.currentweight_gm }},
     {{ u.currentlevel_percent }}</mat-list-item
   >
-</mat-list>
+</mat-list> -->
+<div *ngIf="!!user">
+  <div class="container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
+    fxLayoutAlign.gt-md="space-around center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+    <div fxFlex="40">
+      <mat-card class="spinner-card">
+        <mat-card-content class="spinner">
+          <h2 class="example-h2">{{user.name}}</h2>
+          <mat-progress-spinner class="example-margin" color="primary" mode="determinate" value="50" diameter="150">
+          </mat-progress-spinner>
+          <div class="progress-value">50</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-<div
-  class="container"
-  fxLayout="row"
-  fxLayout.sm="column"
-  fxLayout.xs="column"
-  fxLayoutAlign.gt-md="space-around center"
-  fxLayoutGap="10px"
-  fxLayoutGap.xs="0"
->
-  <div fxFlex="40">
-    <mat-card class="spinner-card">
-      <mat-card-content class="spinner">
-        <h2 class="example-h2">Raviteja</h2>
-        <mat-progress-spinner
-          class="example-margin"
-          [color]="color"
-          [mode]="mode"
-          [value]="value"
-          [diameter]="150"
-        >
-        </mat-progress-spinner>
-        <div class="progress-value">{{ value }}</div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div fxFlex="30">
-    <mat-card>
-      <mat-card-content>
-        <div>
-          <div class="charts-block">
-            <canvas
-              baseChart
-              [datasets]="barChartData"
-              [labels]="barChartLabels"
-              [options]="barChartOptions"
-              [plugins]="barChartPlugins"
-              [legend]="barChartLegend"
-              [chartType]="barChartType"
-            >
-            </canvas>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+
+    <div fxFlex="30">
+      <google-chart style="width:100%; margin: 0 20px" [dynamicResize]="true" type="Bar" [data]="monthy_data"
+        [columns]="['Month', 'Total Bin Use']"></google-chart>
+    </div>
   </div>
 
-  <div fxFlex="30">
-    <mat-card>
-      <mat-card-content>
-        <div>
-          <div class="charts-block">
-            <canvas
-              baseChart
-              [datasets]="barChartData_two"
-              [labels]="barChartLabels_two"
-              [options]="barChartOptions_two"
-              [plugins]="barChartPlugins_two"
-              [legend]="barChartLegend_two"
-              [chartType]="barChartType_two"
-            >
-            </canvas>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row" style="margin-top: 30px;">
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-      <app-figurecard
-        title="13kg"
-        headerIcon="weekend"
-        category="Total Weight"
-        footContent="Make more..."
-        footerIcon="warning"
-        linearColor="linear-gradient(60deg, #ffa726, #fb8c00)"
-        boxShadow="0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"
-      >
-      </app-figurecard>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 order-sm-last">
-      <app-figurecard
-        title="7"
-        headerIcon="delete_sweep"
-        category="Total Used Bins"
-        footContent="Updated"
-        footerIcon="update"
-        linearColor="linear-gradient(60deg, #ef5350, #e53935)"
-        boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(244, 67, 54, 0.4)"
-      >
-      </app-figurecard>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-      <app-figurecard
-        title="5kg"
-        headerIcon="store"
-        category="Curr Month Wt"
-        footContent="Updated"
-        footerIcon="date_range"
-        linearColor="linear-gradient(60deg, #66bb6a, #43a047)"
-        boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4)"
-      >
-      </app-figurecard>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-      <app-figurecard
-        title="10"
-        headerIcon="redeem"
-        category="Curr Month Use"
-        footContent="Just Updated"
-        footerIcon="update"
-        linearColor="linear-gradient(60deg, #26c6da, #00acc1)"
-        boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4)"
-      >
-      </app-figurecard>
+  <div class="container">
+    <div class="row" style="margin-top: 30px;">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <app-figurecard title="{{user.total_weight_thrown/1000}} Kg" headerIcon="weekend" category="Total Weight"
+          footContent="Make more..." footerIcon="warning" linearColor="linear-gradient(60deg, #ffa726, #fb8c00)"
+          boxShadow="0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)">
+        </app-figurecard>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 order-sm-last">
+        <app-figurecard [title]="user.total_use_count" headerIcon="delete_sweep" category="Total Used Bins"
+          footContent="Updated" footerIcon="update" linearColor="linear-gradient(60deg, #ef5350, #e53935)"
+          boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(244, 67, 54, 0.4)">
+        </app-figurecard>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <app-figurecard title="{{currentMonthWeight/1000}} Kg" headerIcon="store" category="Curr Month Wt"
+          footContent="Updated" footerIcon="date_range" linearColor="linear-gradient(60deg, #66bb6a, #43a047)"
+          boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4)">
+        </app-figurecard>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <app-figurecard [title]="currentMonthUse" headerIcon="redeem" category="Curr Month Use"
+          footContent="Just Updated" footerIcon="update" linearColor="linear-gradient(60deg, #26c6da, #00acc1)"
+          boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4)">
+        </app-figurecard>
+      </div>
     </div>
   </div>
 </div>
-
 <!--
     TODO, display the total useage from userprofile
     {{user.total_use_count}} {{user.total_weight_thrown}}
