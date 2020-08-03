@@ -3,9 +3,11 @@ import { User } from 'firebase';
 export class  COLLECTIONS {
     static readonly USERS = 'Users';
     static readonly BINS = 'Bins';
-    static readonly BINUSAGE = 'BinUsages';
-    static readonly MONTHLYPROFILE = 'MonthlyProfiles';
-    static readonly MONTHLYHIST = 'MonthlyHistograms';
+    static readonly BINUSAGE = 'BinUsage';
+    static readonly MONTHLYPROFILE = 'MonthlyProfile';
+    static readonly MONTHLYHIST = 'MonthlyHistogram';
+    static readonly SCANS = 'scans';
+    static readonly MESSAGES = 'messages';
 }
 
 export class SmartbinUser {

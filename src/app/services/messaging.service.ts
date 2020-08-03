@@ -15,20 +15,29 @@ export class MessagingService {
   private messageSource = new Subject()
   currentMessage = this.messageSource.asObservable()
 
-  constructor(private afs: AngularFirestore, private notify: SnotifyService) { }
+  constructor(private afs: AngularFirestore, private notify: SnotifyService) {
+    this.messaging.usePublicVapidKey("BKzrzNzpjVEzg_nuywGafdKAzXiHqSWVTJ5Y0pOGC5FXfhI0BZ2Zan1T1_8bXq49-Euo8DNqsOSsDqXbF_EX9o8");
+  }
 
   getPermission(user) {
     this.messaging.requestPermission().then(() => {
       // Get Instance ID token. Initially this makes a network call, once retrieved
       // subsequent calls to getToken will return from cache.
       this.notify.success("Notifications permission granted.");
-      return this.messaging.getToken()
+      this.messaging.getToken()
+        .then((token) => {
+          if(token) {
+            console.log(user, token)
+            this.saveToken(user, token)
+          } else {
+            console.log("no token")
+          }
+        })
+        .catch((err) => {
+          console.log(err, 'Unable to get permission');
+          this.notify.error("Unable to get notification permission");
+        });
     })
-      .then(token => this.saveToken(user, token))
-      .catch((err) => {
-        console.log(err, 'Unable to get permission');
-        this.notify.error("Unable to get notification permission");
-      });
   }
 
   monitorRefresh(user) {
@@ -56,7 +65,7 @@ export class MessagingService {
     console.log(currentTokens, token)
 
     if (!currentTokens[token]) {
-      const userRef = this.afs.collection(COLLECTIONS.USERS).doc(user.id)
+      const userRef = this.afs.collection(COLLECTIONS.USERS).doc(user.uid)
       const tokens = { ...currentTokens, [token]: true }
       userRef.update({ fcmTokens: tokens })
     }

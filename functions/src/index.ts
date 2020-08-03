@@ -5,7 +5,7 @@ import * as admin from 'firebase-admin';
 // // https://firebase.google.com/docs/functions/typescript
 //
 export const helloWorld = functions.https.onRequest((request, response) => {
-    functions.logger.info("Hello logs!", { structuredData: true });
+    //functions.logger.info("Hello logs!", { structuredData: true });
     response.send("Hello from Firebase!");
 });
 
@@ -25,7 +25,7 @@ class ScanData {
 
         let length = this.available.length;
         for (let i = 0; i < message.length; i++) {
-            let k = i%this.key.length
+            let k = i % this.key.length
             for (let j = 0; j < length; j++) {
                 if (message[i] == this.available[j]) {
                     let index = (this.key[k].charCodeAt(0) + j) % length;
@@ -44,6 +44,7 @@ class ScanData {
 }
 
 function addBinUsage(data: any, scan: any) {
+    //functions.logger.log("adding bin usage")
     admin.firestore().collection('BinUsage').add({
         bincode: data.code,
         usedby: scan.uid,
@@ -55,16 +56,16 @@ function addBinUsage(data: any, scan: any) {
 
 function updateBin(binref: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>, data: any, wtchange: number, scan: any) {
     let bin = { ...binref.data() };
-    binref.ref.set({
-        current_level: data.level,
-        current_weight: data.weight,
-        total_use_count: bin.total_use_count + 1,
-        total_weight_thrown: bin.total_weight_thrown + wtchange,
-        lastUsed: data.time
-    });
+    //functions.logger.log("updating bin ", bin)
+    bin.current_level = data.level;
+    bin.current_weight = data.weight;
+    bin.total_use_count = bin.total_use_count + 1;
+    bin.total_weight_thrown = bin.total_weight_thrown + wtchange;
+    bin.lastUsed = data.time;
+    binref.ref.update(bin);
     if (wtchange < 0 && data.weight == 0) {
         // emptying the bin. Can think of more cases here
-        admin.firestore().collection(`Users/${scan.uid}`).doc().get().then(userref => {
+        admin.firestore().collection('Users').doc(`${scan.uid}`).get().then(userref => {
             let userdata = { ...userref.data() };
             createMessage(bin.manager, "Bin Emptied", `Your bin ${bin.name} (${bin.code}) is emptied by ${userdata.name}`);
         })
@@ -72,35 +73,44 @@ function updateBin(binref: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.
 }
 
 function updateUserData(scan: any, wtchange: number, data: ScanData) {
-    admin.firestore().collection(`Users/${scan.uid}`).doc().get().then(userref => {
+    //functions.logger.log("updating user data")
+    admin.firestore().collection('Users').doc(`${scan.uid}`).get().then(userref => {
         let userdata = { ...userref.data() };
+        //functions.logger.log("for user ", userdata)
         if (wtchange >= 0) {
-            userref.ref.set({
-                total_use_count: userdata.total_use_count + 1,
-                total_weight_thrown: userdata.total_weight_thrown + wtchange,
-                lastUsed: data.time,
-            });
+            userdata.total_use_count = userdata.total_use_count + 1;
+            userdata.total_weight_thrown = userdata.total_weight_thrown + wtchange;
+            userdata.lastUsed = data.time
+            userref.ref.set(userdata);
             // can customize this later
             createMessage(scan.uid, "Thank You", `You are really doing great! keep it up. This is your use: ${userdata.total_use_count + 1}.`)
         }
         else {
             // wtchange is negative
             // see what to do
+            //functions.logger.log("negative weight change")
+            userdata.total_use_count = userdata.total_use_count + 1;
+            //userdata.total_weight_thrown = userdata.total_weight_thrown + wtchange;
+            userdata.lastUsed = data.time
+            userref.ref.set(userdata);
+            // can customize this later
+            createMessage(scan.uid, "Thank You", `You are really doing great! keep it up. This is your use: ${userdata.total_use_count + 1}.`)
         }
     });
 }
 
 function updateMonthlyProfile(wtchange: number, data: ScanData, scan: any) {
+
     let d = new Date();
     let mid = `${scan.uid}-${d.getMonth()}-${d.getFullYear()}`;
-    admin.firestore().collection(`MonthlyProfile/${mid}`).doc().get().then(mpref => {
+    //functions.logger.log("updating monthly profile", mid)
+    admin.firestore().collection('MonthlyProfile').doc(`${mid}`).get().then(mpref => {
         if (mpref.exists) {
             let mp = { ...mpref.data() };
-            mpref.ref.set({
-                total_use_count: mp.total_use_count + 1,
-                total_weight_thrown: mp.total_weight_thrown + wtchange
-            });
-            updateMonthlyHist(mp.total_use_count + 1)
+            mp.total_use_count = mp.total_use_count + 1;
+            mp.total_weight_thrown = mp.total_weight_thrown + wtchange;
+            mpref.ref.set(mp);
+            updateMonthlyHist(mp.total_use_count)
         }
         else {
             mpref.ref.set({
@@ -118,7 +128,8 @@ function updateMonthlyProfile(wtchange: number, data: ScanData, scan: any) {
 function updateMonthlyHist(total_use_count: number) {
     let d = new Date();
     let id = `${d.getMonth()}-${d.getFullYear()}`;
-    admin.firestore().collection(`MonthlyHistogram/${id}`).doc().get().then(href => {
+    //functions.logger.log("updating monthly histogram ", id)
+    admin.firestore().collection('MonthlyHistogram').doc(`${id}`).get().then(href => {
         if (href.exists) {
             let h = { ...href.data() };
             let pband = Math.min(
@@ -133,7 +144,7 @@ function updateMonthlyHist(total_use_count: number) {
                 h.bands[pband]--;
                 h.bands[cband]++;
             }
-            href.ref.set(h);
+            href.ref.update(h);
         }
         else {
             let h = {
@@ -157,31 +168,35 @@ function updateMonthlyHist(total_use_count: number) {
 export const processScan = functions.firestore.document('scans/{scanid}').onCreate(event => {
     const scan = { ...event.data() };
     const data = new ScanData(scan.code);
-
-    admin.firestore().collection(`Bins/${data.code}`).doc().get().then(binref => {
+    admin.initializeApp()
+    admin.firestore().collection('Bins').doc(data.code).get().then(binref => {
         if (binref.exists) {
+            //functions.logger.log(`Bin ref ${data.code} exist:`, binref);
             // get previous usage
             admin.firestore().collection('BinUsage')
                 .where('bincode', '==', data.code)
                 .orderBy('time', 'desc')
                 .limit(1).get().then(u => {
+                    //functions.logger.log("finding previous entries: ")
                     let wtchange = 0
                     if (u.empty) {
                         // first usage
+                        //functions.logger.log("NO previous entries: ", data.weight)
                         wtchange = data.weight
                     } else {
                         let prevusage = { ...u.docs[0].data() }
+                        //functions.logger.log("found previous entry: ", prevusage)
                         // now we have prev usage
                         wtchange = data.weight - prevusage.currentweight_gm
                         // what if this is negative?
-
-                        addBinUsage(data, scan);
-                        updateBin(binref, data, wtchange, scan);
-                        updateUserData(scan, wtchange, data);
-                        updateMonthlyProfile(wtchange, data, scan);
                     }
+                    addBinUsage(data, scan);
+                    updateBin(binref, data, wtchange, scan);
+                    updateUserData(scan, wtchange, data);
+                    updateMonthlyProfile(wtchange, data, scan);
                 })
         } else {
+            //functions.logger.log(`Bin ref ${data.code} does not exist:`);
             // message bin doesnt exist
             createMessage(scan.uid, "Invalid Bin", "Your scan data is wrong!")
         }
@@ -190,8 +205,9 @@ export const processScan = functions.firestore.document('scans/{scanid}').onCrea
 
 function createMessage(user: string, messagetitle: string, messagebody: string) {
     let d: number = Date.now()
-    admin.firestore().collection(`messages/${user}-${d}`).doc().set(
+    admin.firestore().collection('messages').doc(`${user}-${d}`).set(
         {
+            uid: user,
             title: messagetitle,
             body: messagebody
         }
@@ -201,7 +217,7 @@ function createMessage(user: string, messagetitle: string, messagebody: string) 
 export const notifyUser = functions.firestore.document('messages/{messageId}').onCreate(event => {
     const message = { ...event.data() };
     const userId = message.recipientId;
-
+    admin.initializeApp()
     // message details for end user
     const payload = {
         notification: {

@@ -173,7 +173,7 @@ export class CrudService {
   }
 
   FetchScan(code: string) {
-    return this.db.collection('scans', (ref)=>{
+    return this.db.collection(COLLECTIONS.SCANS, (ref)=>{
       return ref.where('code', '==', code)
     }).valueChanges();
   }
