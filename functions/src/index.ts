@@ -23,18 +23,12 @@ class ScanData {
         // TODO populate from encrypted message
         let decrypted = ''
 
-        let length=this.available.length;
-        for(let i=0, k=0; i<message.length; i++,k++)
-        {
-            if(k>=this.key.length)
-            {
-                k=0;
-            }
-            for(let j=0;j<length;j++)
-            {
-                if(message[i]==this.available[j])
-                {
-                    let index = (this.key[k].charCodeAt(0)+j) % length;
+        let length = this.available.length;
+        for (let i = 0; i < message.length; i++) {
+            let k = i%this.key.length
+            for (let j = 0; j < length; j++) {
+                if (message[i] == this.available[j]) {
+                    let index = (this.key[k].charCodeAt(0) + j) % length;
                     decrypted += this.available[index];
                 }
             }
@@ -59,7 +53,7 @@ function addBinUsage(data: any, scan: any) {
     });
 }
 
-function updateBin(binref: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>, data: any, wtchange: number, scan:any) {
+function updateBin(binref: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>, data: any, wtchange: number, scan: any) {
     let bin = { ...binref.data() };
     binref.ref.set({
         current_level: data.level,
@@ -68,11 +62,11 @@ function updateBin(binref: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.
         total_weight_thrown: bin.total_weight_thrown + wtchange,
         lastUsed: data.time
     });
-    if(wtchange<0 && data.weight==0) {
+    if (wtchange < 0 && data.weight == 0) {
         // emptying the bin. Can think of more cases here
         admin.firestore().collection(`Users/${scan.uid}`).doc().get().then(userref => {
             let userdata = { ...userref.data() };
-            createMessage(bin.manager, "Bin Emptied",  `Your bin ${bin.name} (${bin.code}) is emptied by ${userdata.name}`);
+            createMessage(bin.manager, "Bin Emptied", `Your bin ${bin.name} (${bin.code}) is emptied by ${userdata.name}`);
         })
     }
 }
@@ -205,7 +199,7 @@ function createMessage(user: string, messagetitle: string, messagebody: string) 
 }
 
 export const notifyUser = functions.firestore.document('messages/{messageId}').onCreate(event => {
-    const message = {...event.data()};
+    const message = { ...event.data() };
     const userId = message.recipientId;
 
     // message details for end user
